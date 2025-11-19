@@ -1,7 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=15 format=3 uid="uid://cr3cb80ak8u5u"]
 
 [ext_resource type="Script" uid="uid://clewcjcceetg3" path="res://character_body_3d.gd" id="1_a202f"]
+[ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
 [ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_a0tk4"]
+[ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_jka67"]
 [ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="2_noarx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
@@ -18,6 +20,11 @@ tonemap_mode = 2
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jka67"]
+render_priority = 0
+shader = ExtResource("1_r3fl7")
+shader_parameter/image = ExtResource("2_jka67")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_4xowi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
@@ -26,6 +33,8 @@ tonemap_mode = 2
 initial_velocity_min = 7.0
 initial_velocity_max = 10.0
 gravity = Vector3(0, 0, 0)
+damping_min = 10.0
+damping_max = 100.00001
 
 [sub_resource type="BoxMesh" id="BoxMesh_r3fl7"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -40,6 +49,7 @@ transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 mesh = SubResource("BoxMesh_4xowi")
+surface_material_override/0 = SubResource("ShaderMaterial_jka67")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("BoxShape3D_4xowi")
