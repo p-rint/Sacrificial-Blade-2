@@ -4,19 +4,19 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-const dashSpeed = 50.0
+const DASHSPEED = 45.0
 
 var camDir = Vector3(0,0,0) #Where the camera is facing
 
 var direction = Vector3(0,0,0) # Movedirection
 
-#var dashVel = Vector3.ZERO
+var dashVel = 0
 
 func dash(dir : Vector3) -> void:
-	#dashVel += Vector3(10,0,0)
-	if dir:
-		velocity = Vector3.ZERO
-		velocity.z = -50 #or wherever the player is facing
+	
+	
+	dashVel = DASHSPEED #or wherever the player is facing
+	velocity.z = DASHSPEED
 		#move_and_slide()
 
 
@@ -43,11 +43,12 @@ func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("Left","Right", "Up", "Down")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = (direction.x * SPEED)
-		velocity.z = (direction.z * SPEED)	
+		velocity.x = (direction.x * (SPEED + dashVel))
+		velocity.z = (direction.z * (SPEED + dashVel))	
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+	dashVel = move_toward(dashVel, 0, SPEED)
 	
 	if Input.is_action_just_pressed("Dash"):
 		dash(direction)

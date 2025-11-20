@@ -1,10 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=20 format=3 uid="uid://cr3cb80ak8u5u"]
 
 [ext_resource type="Script" uid="uid://clewcjcceetg3" path="res://character_body_3d.gd" id="1_a202f"]
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
 [ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_a0tk4"]
 [ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_jka67"]
 [ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="2_noarx"]
+[ext_resource type="Shader" uid="uid://b7qtoh4wbkk3r" path="res://dissolve.gdshader" id="6_i5arm"]
+[ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -38,6 +40,15 @@ damping_max = 100.00001
 
 [sub_resource type="BoxMesh" id="BoxMesh_r3fl7"]
 size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jsk3o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsk3o"]
+shader = ExtResource("6_i5arm")
+shader_parameter/noise = SubResource("NoiseTexture2D_jsk3o")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wc5p8"]
+shader = ExtResource("7_wc5p8")
 
 [node name="Node3D" type="Node3D"]
 
@@ -75,3 +86,17 @@ script = ExtResource("2_noarx")
 [node name="GPUParticles3D" type="GPUParticles3D" parent="CharacterBody3D"]
 process_material = SubResource("ParticleProcessMaterial_a0tk4")
 draw_pass_1 = SubResource("BoxMesh_r3fl7")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_jsk3o")
+position = Vector2(199, 200)
+scale = Vector2(3, 3)
+texture = ExtResource("2_jka67")
+
+[node name="Sprite2D2" type="Sprite2D" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_wc5p8")
+position = Vector2(624, 200)
+scale = Vector2(3, 3)
+texture = ExtResource("2_jka67")
