@@ -1,10 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=15 format=3 uid="uid://cr3cb80ak8u5u"]
 
-[ext_resource type="Script" uid="uid://clewcjcceetg3" path="res://character_body_3d.gd" id="1_a202f"]
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
-[ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_a0tk4"]
 [ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_jka67"]
-[ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="2_noarx"]
+[ext_resource type="PackedScene" uid="uid://b5untqg1w05xr" path="res://character_body_3d.tscn" id="3_jka67"]
 [ext_resource type="Shader" uid="uid://b7qtoh4wbkk3r" path="res://dissolve.gdshader" id="6_i5arm"]
 [ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
 
@@ -28,18 +26,6 @@ shader = ExtResource("1_r3fl7")
 shader_parameter/image = ExtResource("2_jka67")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4xowi"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a0tk4"]
-initial_velocity_min = 7.0
-initial_velocity_max = 10.0
-gravity = Vector3(0, 0, 0)
-damping_min = 10.0
-damping_max = 100.00001
-
-[sub_resource type="BoxMesh" id="BoxMesh_r3fl7"]
-size = Vector3(0.1, 0.1, 0.1)
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jsk3o"]
 
@@ -65,29 +51,11 @@ surface_material_override/0 = SubResource("ShaderMaterial_jka67")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("BoxShape3D_4xowi")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" parent="." instance=ExtResource("3_jka67")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-script = ExtResource("1_a202f")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
-mesh = SubResource("BoxMesh_4xowi")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-shape = SubResource("BoxShape3D_noarx")
-
-[node name="CamPivot" type="Node3D" parent="CharacterBody3D"]
-script = ExtResource("2_a0tk4")
-
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CamPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1641245, 2.4937534)
-script = ExtResource("2_noarx")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="CharacterBody3D"]
-process_material = SubResource("ParticleProcessMaterial_a0tk4")
-draw_pass_1 = SubResource("BoxMesh_r3fl7")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_jsk3o")
@@ -98,5 +66,11 @@ texture = ExtResource("2_jka67")
 [node name="Sprite2D2" type="Sprite2D" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_wc5p8")
 position = Vector2(624, 200)
+scale = Vector2(3, 3)
+texture = ExtResource("2_jka67")
+
+[node name="Sprite2D3" type="Sprite2D" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_wc5p8")
+position = Vector2(1017, 198.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("2_jka67")
