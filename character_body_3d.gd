@@ -25,7 +25,7 @@ var attackAnimTable = ["Attack", "Attack2", "Attack3"]
 
 var isSprinting = false
 
-func comboManager() -> void:
+func comboManager(delta) -> void:
 	if comboNum < attackAnimTable.size():
 		#attackTable[comboNum].call()
 		animPlr.play(attackAnimTable[comboNum])
@@ -34,12 +34,16 @@ func comboManager() -> void:
 			#animTree.set("parameters/" + attackAnimTable[comboNum - 1] + "/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
 		
 		animTree.set("parameters/" + attackAnimTable[comboNum] + "/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		$CamPivot/Camera3D.XscreenShake(delta)
 		print(comboNum)
 		comboNum += 1
 		
 	else:
-		animPlr.play(attackAnimTable[0])
+		print("0")
+		animTree.set("parameters/Attack/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		comboNum = 1
+
+
 
 
 func dash(dir : Vector3) -> void:
@@ -107,7 +111,7 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("Attack"):
 		#attack()
-		comboManager()
+		comboManager(delta)
 		
 	if Input.is_action_pressed("Dash"):
 		sprintSpeed = 2

@@ -2,9 +2,21 @@ extends Node3D
 
 var mouseLock = false
 
+@onready var enemy = $"../../EnemyBody3D2"
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
+	
+
+func lockAt() -> void:
+	var dir = (global_position - enemy.position )
+	var angle = Vector2(dir.x, dir.z).angle()
+	
+	#rotation.y = angle
+	print(angle)
+	
+	pass 
 	
 
 
@@ -32,5 +44,9 @@ func _process(delta: float) -> void:
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		mouseLock = not mouseLock
-	pass
+	#lockAt()
+	
+	
+	#if Input.is_action_just_pressed("LockOn"):
+	
 		

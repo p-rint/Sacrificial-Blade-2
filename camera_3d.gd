@@ -22,6 +22,7 @@ func XscreenShake(dt) -> void: # dt is delta
 	
 	if strength <= 0:
 		time = 0
+	#Engine.time_scale = time
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,6 +31,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("shake"):
 		print("rah")
 		startShake(.1)
+		
 	XscreenShake(delta)
 	
 	

@@ -1,8 +1,6 @@
-[gd_scene load_steps=35 format=3 uid="uid://b5untqg1w05xr"]
+[gd_scene load_steps=33 format=3 uid="uid://dos2bifkvy03p"]
 
-[ext_resource type="Script" uid="uid://clewcjcceetg3" path="res://character_body_3d.gd" id="1_vd578"]
-[ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_c7tqt"]
-[ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="3_nl27k"]
+[ext_resource type="Script" uid="uid://dshvlc82ntk7q" path="res://enemy_body_3d.gd" id="1_s3ewn"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
@@ -268,8 +266,8 @@ nodes/Dsh/node = SubResource("AnimationNodeAnimation_4wng8")
 nodes/Dsh/position = Vector2(430, 440)
 node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Attack", 1, &"atk1", &"Attack2", 0, &"Attack", &"Attack2", 1, &"atk2", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"atk3", &"Dash", 0, &"Attack3", &"Dash", 1, &"Dsh"]
 
-[node name="CharacterBody3D" type="CharacterBody3D"]
-script = ExtResource("1_vd578")
+[node name="EnemyBody3D2" type="CharacterBody3D"]
+script = ExtResource("1_s3ewn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.9999999, 0, 0, 0, 0.9958812, 0.09066737, 0, -0.09066734, 0.9958815, -0.088504076, 0, 0)
@@ -285,13 +283,6 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_noarx")
-
-[node name="CamPivot" type="Node3D" parent="."]
-script = ExtResource("2_c7tqt")
-
-[node name="Camera3D" type="Camera3D" parent="CamPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1641245, 2.4937534)
-script = ExtResource("3_nl27k")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 emitting = false

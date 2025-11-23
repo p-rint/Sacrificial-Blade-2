@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=16 format=3 uid="uid://cr3cb80ak8u5u"]
 
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
 [ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_jka67"]
 [ext_resource type="PackedScene" uid="uid://b5untqg1w05xr" path="res://character_body_3d.tscn" id="3_jka67"]
+[ext_resource type="PackedScene" uid="uid://dos2bifkvy03p" path="res://enemy_body_3d_2.tscn" id="4_i5arm"]
 [ext_resource type="Shader" uid="uid://b7qtoh4wbkk3r" path="res://dissolve.gdshader" id="6_i5arm"]
 [ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
 
@@ -53,6 +54,9 @@ shape = SubResource("BoxShape3D_4xowi")
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("3_jka67")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+
+[node name="EnemyBody3D2" parent="." instance=ExtResource("4_i5arm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -6.892578)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
