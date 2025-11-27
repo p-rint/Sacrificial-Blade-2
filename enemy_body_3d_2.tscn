@@ -1,6 +1,7 @@
-[gd_scene load_steps=33 format=3 uid="uid://dos2bifkvy03p"]
+[gd_scene load_steps=34 format=3 uid="uid://dos2bifkvy03p"]
 
-[ext_resource type="Script" uid="uid://dshvlc82ntk7q" path="res://enemy_body_3d.gd" id="1_s3ewn"]
+[ext_resource type="Script" uid="uid://ralyxpxx7ot8" path="res://enemy_body_3d_2.gd" id="1_s3ewn"]
+[ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_k0kfp"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
@@ -244,7 +245,6 @@ animation = &"Attack2"
 animation = &"Attack3"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1lp5"]
-graph_offset = Vector2(-329.09476, -15.590801)
 nodes/output/position = Vector2(1450, 100)
 nodes/MoveDirection/node = SubResource("AnimationNodeBlendSpace2D_4wng8")
 nodes/MoveDirection/position = Vector2(-540, 60)
@@ -300,6 +300,7 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
 tree_root = SubResource("AnimationNodeBlendTree_m1lp5")
 anim_player = NodePath("../AnimationPlayer")
 parameters/MoveDirection/blend_position = Vector2(0, 0)
@@ -315,3 +316,8 @@ parameters/Attack3/request = 0
 parameters/Dash/active = false
 parameters/Dash/internal_active = false
 parameters/Dash/request = 0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1337428, 0)
+billboard = 2
+texture = ExtResource("2_k0kfp")

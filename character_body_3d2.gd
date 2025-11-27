@@ -4,6 +4,8 @@ extends CharacterBody3D
 const SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 
+const DASHSPEED = 30
+
 var curSpeed = 0
 
 @onready var cam = $CamPivot
@@ -23,6 +25,10 @@ var isSprint = false
 
 var canMove = true
 
+var isDash = false
+
+var moveDir = Vector3(0,0,0)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -30,7 +36,7 @@ func _ready() -> void:
 func move(delta):
 	if direction:	
 		lastDirection = direction
-		var moveDir = ((camRight * direction.x) + (camForward * direction.z))
+		moveDir = ((camRight * direction.x) + (camForward * direction.z))
 		
 		moveDir.y = 0
 		moveDir = moveDir.normalized()
@@ -40,6 +46,7 @@ func move(delta):
 		
 		lastMoveDir = moveDir
 		
+		lookDir(delta)
 		
 		if isSprint == true:
 			curSpeed = move_toward(curSpeed, SPEED + 4, delta*100)
@@ -47,29 +54,43 @@ func move(delta):
 			curSpeed = move_toward(curSpeed, SPEED, delta*100)
 			
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity = velocity.move_toward(Vector3(0, velocity.y,0), SPEED)
 		curSpeed = move_toward(curSpeed,0, SPEED)
 #	print(curSpeed)
 
 func lookDir(delta : float):
 	if direction:
 		var angle = atan2(-velocity.x, -velocity.z)
-		var finalRot = lerpf(PlayerContainer.rotation.y, angle, 1)
-		PlayerContainer.rotation.y = finalRot 
+		var finalRot = lerpf(PlayerContainer.rotation.y, angle, .5)
+		PlayerContainer.rotation.y = angle 
 
 
 func dash() -> void:
-	var newDir = camForward
+	var newDir
+	
+	if direction: #forward dash
+		newDir = -moveDir
+		PlayerContainer.rotation.y = atan2(newDir.x,newDir.z)
+	else: # backwards dash
+		
+		newDir = -camForward
+		PlayerContainer.rotation.y = atan2(-newDir.x,-newDir.z)
+	
 	newDir.y = 0
 	newDir = newDir.normalized()
+	velocity = newDir * -DASHSPEED
+		#print(newDir)
+		
+		
 	
-	velocity = newDir * -60
-	#velocity.x = newDir.x *  -60
-	#velocity.z = newDir.z *  -60
-	print(newDir)
-	PlayerContainer.rotation.y = atan2(newDir.x,newDir.z)
-
+	
+	curSpeed = DASHSPEED
+	
+	isDash = true
+	await get_tree().create_timer(.1).timeout
+	#velocity = Vector3(0,0,0)
+	isDash = false
+	#print("End")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -95,7 +116,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("Dash"):
 		dash()
-	
-	move(delta)
-	lookDir(delta)
+	if not isDash:
+		move(delta)
+		
 	move_and_slide()
