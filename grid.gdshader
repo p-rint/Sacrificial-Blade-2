@@ -8,7 +8,7 @@ void vertex() {
 
 void fragment() {
 	// Called for every pixel the material is visible on.
-	ALBEDO = texture(image, -UV * 20.0).rgb;
+	ALBEDO = texture(image, -vec2(UV.x * 1.5,UV.y) * 20.0).rgb;
 }
 
 //void light() {

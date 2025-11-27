@@ -17,6 +17,8 @@ var direction = Vector3(0,0,0) # Movedirection
 
 var lastDirection = Vector3(0,0,0)
 
+var lastMoveDir = Vector3(0,0,0)
+
 var isSprint = false
 
 var canMove = true
@@ -28,9 +30,16 @@ func _ready() -> void:
 func move(delta):
 	if direction:	
 		lastDirection = direction
-		var moveDir = ((camRight * direction.x) + (camForward * direction.z)) * curSpeed
-		velocity.x = moveDir.x
-		velocity.z = moveDir.z
+		var moveDir = ((camRight * direction.x) + (camForward * direction.z))
+		
+		moveDir.y = 0
+		moveDir = moveDir.normalized()
+		
+		velocity.x = moveDir.x * curSpeed
+		velocity.z = moveDir.z * curSpeed
+		
+		lastMoveDir = moveDir
+		
 		
 		if isSprint == true:
 			curSpeed = move_toward(curSpeed, SPEED + 4, delta*100)
@@ -41,7 +50,7 @@ func move(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		curSpeed = move_toward(curSpeed,0, SPEED)
-	print(curSpeed)
+#	print(curSpeed)
 
 func lookDir(delta : float):
 	if direction:
@@ -51,21 +60,34 @@ func lookDir(delta : float):
 
 
 func dash() -> void:
-	velocity.z = -40
+	var newDir = camForward
+	newDir.y = 0
+	newDir = newDir.normalized()
+	
+	velocity = newDir * -60
+	#velocity.x = newDir.x *  -60
+	#velocity.z = newDir.z *  -60
+	print(newDir)
+	PlayerContainer.rotation.y = atan2(newDir.x,newDir.z)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
-	camForward = cam.global_basis.z.normalized()
-	camRight = cam.global_basis.x.normalized()
+	camForward = cam.global_basis.z
+	camRight = cam.global_basis.x
+	
+	camDir = cam.global_basis.z + cam.global_basis.x
+	
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
 	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
 	var input_dir = Input.get_vector("Left","Right", "Up", "Down")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
+	#print(direction)
 	if Input.is_action_pressed("Dash"):
 		isSprint = true
 	else:
