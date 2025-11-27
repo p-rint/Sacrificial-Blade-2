@@ -12,6 +12,8 @@ var camDir = Vector3(0,0,0) #Where the camera is facing
 
 var direction = Vector3(0,0,0) # Movedirection
 
+var lastDirection = Vector3(0,0,0)
+
 var dashVel = 0
 
 var sprintSpeed = 5 #Total speed is 10, but just so I can add it to speed
@@ -29,7 +31,8 @@ func comboManager(delta) -> void:
 	if comboNum < attackAnimTable.size():
 		#attackTable[comboNum].call()
 		animPlr.play(attackAnimTable[comboNum])
-		
+		if comboNum - 1 >= 0:
+			print("yes!!")
 		#if comboNum > 0:
 			#animTree.set("parameters/" + attackAnimTable[comboNum - 1] + "/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
 		
@@ -91,13 +94,19 @@ func attack6() -> void:
 	velocity.y = -60
 
 
-
+func lookDir(direction : Vector2, dt) -> void:
+	var angle = lerp($PlayerContainer.rotation.y, atan2(direction.x, direction.y), .2)
+	
+	$PlayerContainer.rotation.y = angle
+	
 
 func _physics_process(delta: float) -> void:
 	
-	var camRight = $CamPivot.global_transform.basis.x
-	var camForward = $CamPivot.global_transform.basis.z
+	var camRight = $CamPivot.global_basis.x
+	var camForward = $CamPivot.global_basis.z
 	camDir = (camRight + camForward).normalized()
+	camDir.y = 0
+	#lookDir(camDir)
 	#print(camDir)
 	
 	
@@ -124,13 +133,16 @@ func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("Left","Right", "Up", "Down")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = (direction.x * (SPEED + dashVel + sprintSpeed))
-		velocity.z = (direction.z * (SPEED + dashVel + sprintSpeed))	
-		
+		#velocity.x = (direction.x * (SPEED + dashVel + sprintSpeed))
+		#velocity.z = (direction.z * (SPEED + dashVel + sprintSpeed))	
+		var moveDir = ((camRight * direction.x) + (camForward * direction.z)) * SPEED
+		velocity.x = moveDir.x
+		velocity.z = moveDir.z
 		#velocity = camDir
 		
 		curSpeed = move_toward(curSpeed,5, SPEED)
-		
+		#lastDirection = direction
+		lookDir(-Vector2(velocity.x,velocity.z), delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)

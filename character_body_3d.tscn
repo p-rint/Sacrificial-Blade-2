@@ -1,10 +1,8 @@
 [gd_scene load_steps=35 format=3 uid="uid://b5untqg1w05xr"]
 
-[ext_resource type="Script" uid="uid://clewcjcceetg3" path="res://character_body_3d.gd" id="1_vd578"]
+[ext_resource type="Script" uid="uid://boa513wm16y51" path="res://character_body_3d2.gd" id="1_vd578"]
 [ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_c7tqt"]
 [ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="3_nl27k"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
 
@@ -34,7 +32,7 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -49,7 +47,7 @@ resource_name = "Attack2"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -64,7 +62,7 @@ resource_name = "Attack3"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -80,7 +78,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -95,7 +93,7 @@ resource_name = "Down"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -110,7 +108,7 @@ resource_name = "Left"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -125,7 +123,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -137,14 +135,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:rotation")
+tracks/1/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.09079203, 0, 0)]
+"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_u3olo"]
@@ -152,7 +150,7 @@ resource_name = "Right"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -167,7 +165,7 @@ resource_name = "Up"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -246,7 +244,6 @@ animation = &"Attack2"
 animation = &"Attack3"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1lp5"]
-graph_offset = Vector2(-329.09476, -15.590801)
 nodes/output/position = Vector2(1450, 100)
 nodes/MoveDirection/node = SubResource("AnimationNodeBlendSpace2D_4wng8")
 nodes/MoveDirection/position = Vector2(-540, 60)
@@ -268,20 +265,10 @@ nodes/Dsh/node = SubResource("AnimationNodeAnimation_4wng8")
 nodes/Dsh/position = Vector2(430, 440)
 node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Attack", 1, &"atk1", &"Attack2", 0, &"Attack", &"Attack2", 1, &"atk2", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"atk3", &"Dash", 0, &"Attack3", &"Dash", 1, &"Dsh"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
 [node name="CharacterBody3D" type="CharacterBody3D"]
 script = ExtResource("1_vd578")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9999999, 0, 0, 0, 0.9958812, 0.09066737, 0, -0.09066734, 0.9958815, -0.088504076, 0, 0)
-mesh = SubResource("BoxMesh_4xowi")
-skeleton = NodePath("../..")
-
-[node name="SwordPivot" type="Node3D" parent="MeshInstance3D"]
-
-[node name="Sword" type="MeshInstance3D" parent="MeshInstance3D/SwordPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
-mesh = SubResource("BoxMesh_4xowi")
-skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_noarx")
@@ -324,3 +311,24 @@ parameters/Attack3/request = 0
 parameters/Dash/active = false
 parameters/Dash/internal_active = false
 parameters/Dash/request = 0
+
+[node name="PlayerContainer" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerContainer"]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0, 1.0000002, 0, 0, 0)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../../..")
+
+[node name="SwordPivot" type="Node3D" parent="PlayerContainer/MeshInstance3D"]
+
+[node name="Sword" type="MeshInstance3D" parent="PlayerContainer/MeshInstance3D/SwordPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
+
+[node name="SwordPivot2" type="Node3D" parent="PlayerContainer/MeshInstance3D"]
+
+[node name="Sword" type="MeshInstance3D" parent="PlayerContainer/MeshInstance3D/SwordPivot2"]
+transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")

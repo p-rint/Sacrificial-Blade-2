@@ -62,12 +62,12 @@ func dash() -> void:
 		velocity = dir * 10
 		canDash = false
 		canMove = false
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(.4).timeout
 		canMove = true
-		print("canb mrovwdew")
-		await get_tree().create_timer(.9).timeout
+		#print("canb mrovwdew")
+		await get_tree().create_timer(.6).timeout
 		canDash = true
-		print("adfqedx")
+		#print("adfqedx")
 	
 
 	
@@ -94,7 +94,7 @@ func prep() -> void:
 	if dist <= 5:
 		#print("good to atk")
 		if canAttack == true:
-			print("ASACfade")
+			#print("ASACfade")
 			canAttack = false
 			await windUp()
 			#await get_tree().create_timer(.5).timeout
@@ -145,9 +145,9 @@ func _physics_process(delta: float) -> void:
 	
 	#animTree.set("parameters/MoveDirection/blend_position", Vector2(direction.x, -direction.z))
 	lookAtPlayer()
-	prep()
-	jump()
+	#prep()
+	#jump()
 	stateManage()
 	#getTime()
-	dash()
+	#dash()
 	move_and_slide()

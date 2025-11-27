@@ -1,11 +1,12 @@
 extends Node3D
 
-var mouseLock = false
+var mouseLock = true
 
 @onready var enemy = $"../../EnemyBody3D2"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	pass # Replace with function body.
 	
 
@@ -13,8 +14,7 @@ func lockAt() -> void:
 	var dir = (global_position - enemy.position )
 	var angle = Vector2(dir.x, dir.z).angle()
 	
-	#rotation.y = angle
-	print(angle)
+	#print(angle)
 	
 	pass 
 	
