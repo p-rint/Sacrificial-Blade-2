@@ -1,0 +1,61 @@
+[gd_scene load_steps=11 format=3 uid="uid://c6c21xxy3bm2p"]
+
+[ext_resource type="Script" uid="uid://w5vm6kg8ixf" path="res://robot.gd" id="1_yhfw1"]
+[ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_bkaji"]
+[ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="3_hvhn1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yhfw1"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ru5oq"]
+sky_material = SubResource("ProceduralSkyMaterial_yhfw1")
+
+[sub_resource type="Environment" id="Environment_7xofo"]
+background_mode = 2
+sky = SubResource("Sky_ru5oq")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_gv0v2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yyxj1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7xofo")
+
+[node name="Floor" type="Node" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(18, 0, 0, 0, 1, 0, 0, 0, 18, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D"]
+mesh = SubResource("BoxMesh_gv0v2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("BoxShape3D_yyxj1")
+
+[node name="Robot" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6780512, 0)
+script = ExtResource("1_yhfw1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Robot"]
+shape = SubResource("BoxShape3D_noarx")
+
+[node name="CamPivot" type="Node3D" parent="Robot"]
+script = ExtResource("2_bkaji")
+
+[node name="Camera3D" type="Camera3D" parent="Robot/CamPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1641245, 2.4937534)
+script = ExtResource("3_hvhn1")
+
+[node name="PlayerContainer" type="Node3D" parent="Robot"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Robot/PlayerContainer"]
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../../..")

@@ -1,0 +1,626 @@
+[gd_scene load_steps=52 format=3 uid="uid://b5untqg1w05xr"]
+
+[ext_resource type="Script" uid="uid://boa513wm16y51" path="res://character_body_3d2.gd" id="1_vd578"]
+[ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_c7tqt"]
+[ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="3_nl27k"]
+[ext_resource type="Script" uid="uid://drqhjstwnh03t" path="res://PlayerHitbox.gd" id="4_e80uo"]
+[ext_resource type="ArrayMesh" uid="uid://i3bf80p6ueyr" path="res://Slash/slash.obj" id="5_cxr5p"]
+[ext_resource type="Shader" uid="uid://wdd5n7nkq2kn" path="res://Slash.gdshader" id="5_dtqjt"]
+[ext_resource type="Texture2D" uid="uid://cla6pewbhpe7q" path="res://Slash/Slash Texture.png" id="6_5ncpa"]
+[ext_resource type="ArrayMesh" uid="uid://bop0tidirljrl" path="res://Sword Slash/sword slash.obj" id="8_wi0c6"]
+[ext_resource type="Texture2D" uid="uid://cnxvlrayqfghu" path="res://Sword Slash/slash.png" id="10_hp6x6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
+
+[sub_resource type="Animation" id="Animation_vd578"]
+resource_name = "Attack"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06666666, 0.11971958, 0.15819743, 0.19915321, 0.40000004),
+"transitions": PackedFloat32Array(1, 1.8660661, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -2.2570248, 0), Vector3(0, -1.6772438, 0), Vector3(0, 0.048014168, 0), Vector3(0, 1.7680185, 0), Vector3(0, 1.4765486, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12788178, 0.35612997),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/MeshVFX/Slash:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.119728126, 0.19851695),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -5.614724, 0), Vector3(0, -2.193879, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.13333334, 0.16169733, 0.19318709, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 0.2000000095, 1.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerContainer/MeshVFX/Slash:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2, -2, -2)]
+}
+
+[sub_resource type="Animation" id="Animation_nl27k"]
+resource_name = "Attack2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.097069144, 0.3025503),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.4765486, 0), Vector3(0, -0.9911027, 0), Vector3(0, -0.96593505, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.17123078),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.028322782, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -0.82030475, 0), Vector3(0, -3.4295719, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerContainer/MeshVFX/Slash:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-2, -2, -2)]
+}
+
+[sub_resource type="Animation" id="Animation_obynr"]
+resource_name = "Attack3"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10380295, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -0.9651671, 0), Vector3(0, 1.2339478, 0), Vector3(0, 1.2223413, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.019239414, 0.19624202),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2, -2, -2)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerContainer/MeshVFX/Slash:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.10633917),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.4870205, 0), Vector3(0, 3.6721728, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hp6x6"]
+resource_name = "Attack4"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.2223413, 0), Vector3(0.99519527, -0.2161464, 0.30840632), Vector3(0.97777724, -0.20538203, 0.31507587)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.06666667, 0.26666668),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_nvtkd"]
+resource_name = "Dash"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1.319508, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.57040846, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1igb4"]
+resource_name = "Down"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.19015364, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ew7rt"]
+resource_name = "Left"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0.18704692)]
+}
+
+[sub_resource type="Animation" id="Animation_c7tqt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -5.614724, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlayerContainer/MeshVFX/Slash:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2, -2, -2)]
+}
+
+[sub_resource type="Animation" id="Animation_u3olo"]
+resource_name = "Right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -0.23071508)]
+}
+
+[sub_resource type="Animation" id="Animation_jvo56"]
+resource_name = "Up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.09079203, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_obynr"]
+_data = {
+&"Attack": SubResource("Animation_vd578"),
+&"Attack2": SubResource("Animation_nl27k"),
+&"Attack3": SubResource("Animation_obynr"),
+&"Attack4": SubResource("Animation_hp6x6"),
+&"Dash": SubResource("Animation_nvtkd"),
+&"Down": SubResource("Animation_1igb4"),
+&"Left": SubResource("Animation_ew7rt"),
+&"RESET": SubResource("Animation_c7tqt"),
+&"Right": SubResource("Animation_u3olo"),
+&"Up": SubResource("Animation_jvo56")
+}
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_c7tqt"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_vd578"]
+fadein_time = 0.07
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_nl27k"]
+fadein_time = 0.07
+fadeout_time = 0.2
+
+[sub_resource type="Curve" id="Curve_gy32l"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_18j2g"]
+fadein_time = 0.1
+fadeout_time = 0.1
+fadeout_curve = SubResource("Curve_gy32l")
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4wng8"]
+animation = &"Dash"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nvtkd"]
+animation = &"Left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gy32l"]
+animation = &"Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_18j2g"]
+animation = &"Up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ltcqi"]
+animation = &"Down"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_4wng8"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_nvtkd")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_gy32l")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_18j2g")
+blend_point_2/pos = Vector2(0, 0.90000004)
+blend_point_3/node = SubResource("AnimationNodeAnimation_ltcqi")
+blend_point_3/pos = Vector2(0, -0.90000004)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vd578"]
+animation = &"Attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_obynr"]
+animation = &"Attack2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jvo56"]
+animation = &"Attack3"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1lp5"]
+nodes/output/position = Vector2(1450, 100)
+nodes/MoveDirection/node = SubResource("AnimationNodeBlendSpace2D_4wng8")
+nodes/MoveDirection/position = Vector2(-540, 60)
+nodes/Attack/node = SubResource("AnimationNodeOneShot_c7tqt")
+nodes/Attack/position = Vector2(-220, 90)
+nodes/atk1/node = SubResource("AnimationNodeAnimation_vd578")
+nodes/atk1/position = Vector2(-670, 380)
+nodes/atk2/node = SubResource("AnimationNodeAnimation_obynr")
+nodes/atk2/position = Vector2(-410, 460)
+nodes/atk3/node = SubResource("AnimationNodeAnimation_jvo56")
+nodes/atk3/position = Vector2(-150, 460)
+nodes/Attack2/node = SubResource("AnimationNodeOneShot_vd578")
+nodes/Attack2/position = Vector2(-50, 90)
+nodes/Attack3/node = SubResource("AnimationNodeOneShot_nl27k")
+nodes/Attack3/position = Vector2(100, 90)
+nodes/Dash/node = SubResource("AnimationNodeOneShot_18j2g")
+nodes/Dash/position = Vector2(820, 70)
+nodes/Dsh/node = SubResource("AnimationNodeAnimation_4wng8")
+nodes/Dsh/position = Vector2(430, 440)
+node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Attack", 1, &"atk1", &"Attack2", 0, &"Attack", &"Attack2", 1, &"atk2", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"atk3", &"Dash", 0, &"Attack3", &"Dash", 1, &"Dsh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vd578"]
+size = Vector3(1.8242188, 1.7287598, 2.9941406)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3tkgg"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3tkgg"]
+noise = SubResource("FastNoiseLite_3tkgg")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hp6x6"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l6ohk"]
+noise = SubResource("FastNoiseLite_hp6x6")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l6ohk"]
+render_priority = 0
+shader = ExtResource("5_dtqjt")
+shader_parameter/texture = ExtResource("10_hp6x6")
+shader_parameter/noise = SubResource("NoiseTexture2D_3tkgg")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_l6ohk")
+shader_parameter/time = 1.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dtqjt"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5ncpa"]
+noise = SubResource("FastNoiseLite_dtqjt")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ncpa"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wi0c6"]
+noise = SubResource("FastNoiseLite_5ncpa")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wi0c6"]
+render_priority = 0
+shader = ExtResource("5_dtqjt")
+shader_parameter/texture = ExtResource("6_5ncpa")
+shader_parameter/noise = SubResource("NoiseTexture2D_5ncpa")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_wi0c6")
+shader_parameter/time = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tdg3f"]
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5ncpa"]
+emission_shape_scale = Vector3(0.5, 0.1, 0.1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+inherit_velocity_ratio = -0.1
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_wi0c6"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_vd578")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_noarx")
+
+[node name="CamPivot" type="Node3D" parent="."]
+script = ExtResource("2_c7tqt")
+
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1641245, 2.4937534)
+script = ExtResource("3_nl27k")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_obynr")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+tree_root = SubResource("AnimationNodeBlendTree_m1lp5")
+anim_player = NodePath("../AnimationPlayer")
+parameters/MoveDirection/blend_position = Vector2(0, 0)
+parameters/Attack/active = false
+parameters/Attack/internal_active = false
+parameters/Attack/request = 0
+parameters/Attack2/active = false
+parameters/Attack2/internal_active = false
+parameters/Attack2/request = 0
+parameters/Attack3/active = false
+parameters/Attack3/internal_active = false
+parameters/Attack3/request = 0
+parameters/Dash/active = false
+parameters/Dash/internal_active = false
+parameters/Dash/request = 0
+
+[node name="PlayerContainer" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerContainer"]
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../../..")
+
+[node name="SwordPivot" type="Node3D" parent="PlayerContainer/MeshInstance3D"]
+transform = Transform3D(0.99999976, 0, 0, 0, 0.50000006, 0, 0, 0, 1.0000002, 0, 0, 0)
+
+[node name="Sword" type="MeshInstance3D" parent="PlayerContainer/MeshInstance3D/SwordPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
+
+[node name="SwordHitbox" type="Area3D" parent="PlayerContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0000005)
+monitoring = false
+script = ExtResource("4_e80uo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerContainer/SwordHitbox"]
+shape = SubResource("BoxShape3D_vd578")
+debug_color = Color(0.96023375, 0.99162036, 0.99999994, 0.41960785)
+
+[node name="MeshVFX" type="Node3D" parent="PlayerContainer"]
+
+[node name="Slash" type="MeshInstance3D" parent="PlayerContainer/MeshVFX"]
+transform = Transform3D(1.5695527, 0, -1.2395581, 0, -2, 0, -1.2395581, 0, -1.5695527, 0, 0, 0)
+mesh = ExtResource("8_wi0c6")
+surface_material_override/0 = SubResource("ShaderMaterial_l6ohk")
+
+[node name="Slash" type="Node3D" parent="."]
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="Timer" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="Particles" type="Node3D" parent="."]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Particles"]
+transform = Transform3D(-0.99832267, 0, 0.05789513, 0, 1, 0, -0.05789513, 0, -0.99832267, 0, 0, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_wi0c6")
+amount = 2
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_tdg3f")
+draw_pass_1 = ExtResource("5_cxr5p")
+
+[node name="WalkDust" type="GPUParticles3D" parent="Particles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3341416, 0.34435534)
+visible = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_5ncpa")
+draw_pass_1 = SubResource("BoxMesh_wi0c6")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+debug_shape_custom_color = Color(1, 1, 1, 1)
+debug_shape_thickness = 5

@@ -1,11 +1,23 @@
-[gd_scene load_steps=16 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=19 format=3 uid="uid://cr3cb80ak8u5u"]
 
+[ext_resource type="PackedScene" uid="uid://cgvjl3n3fcsu3" path="res://map.tscn" id="1_4arys"]
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
 [ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_jka67"]
-[ext_resource type="PackedScene" uid="uid://b5untqg1w05xr" path="res://character_body_3d.tscn" id="3_jka67"]
+[ext_resource type="PackedScene" uid="uid://b5untqg1w05xr" path="res://Player.tscn" id="3_jka67"]
 [ext_resource type="PackedScene" uid="uid://dos2bifkvy03p" path="res://enemy_body_3d_2.tscn" id="4_i5arm"]
 [ext_resource type="Shader" uid="uid://b7qtoh4wbkk3r" path="res://dissolve.gdshader" id="6_i5arm"]
+[ext_resource type="Script" uid="uid://s7tresowmm0v" path="res://enemy_hurt_manager.gd" id="7_jsk3o"]
 [ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
+[ext_resource type="Script" uid="uid://bliddh1ofa5b" path="res://attack_data.gd" id="8_jsk3o"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jka67"]
+render_priority = 0
+shader = ExtResource("1_r3fl7")
+shader_parameter/image = ExtResource("2_jka67")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4xowi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -19,15 +31,6 @@ background_mode = 2
 sky = SubResource("Sky_noarx")
 tonemap_mode = 2
 
-[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jka67"]
-render_priority = 0
-shader = ExtResource("1_r3fl7")
-shader_parameter/image = ExtResource("2_jka67")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_4xowi"]
-
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jsk3o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jsk3o"]
@@ -39,20 +42,31 @@ shader = ExtResource("7_wc5p8")
 
 [node name="Node3D" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_a0tk4")
+[node name="MapNew" parent="." instance=ExtResource("1_4arys")]
 
-[node name="Floor" type="StaticBody3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
+[node name="Map" type="Node3D" parent="."]
+visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+[node name="Floor" type="StaticBody3D" parent="Map"]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.784294e-05, 0.008269787, -0.00020050048)
 mesh = SubResource("BoxMesh_4xowi")
 surface_material_override/0 = SubResource("ShaderMaterial_jka67")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Floor"]
 shape = SubResource("BoxShape3D_4xowi")
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("3_jka67")]
+[node name="StaticBody3D" type="StaticBody3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.52664, 3.85927, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/StaticBody3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_a0tk4")
+
+[node name="Player" parent="." instance=ExtResource("3_jka67")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 
 [node name="EnemyBody3D2" parent="." instance=ExtResource("4_i5arm")]
@@ -90,3 +104,9 @@ offset_right = 40.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 100
 text = "100"
+
+[node name="Hurts" type="Node" parent="."]
+script = ExtResource("7_jsk3o")
+
+[node name="AttackData" type="Node" parent="."]
+script = ExtResource("8_jsk3o")

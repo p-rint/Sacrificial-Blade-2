@@ -29,6 +29,10 @@ var isDash = false
 
 var moveDir = Vector3(0,0,0)
 
+var forwardDir = Vector3()
+
+@onready var rayCast = $RayCast3D
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -58,9 +62,9 @@ func move(delta):
 		curSpeed = move_toward(curSpeed,0, SPEED)
 #	print(curSpeed)
 
-func lookDir(delta : float):
+func lookDir(delta :float):
 	if direction:
-		var angle = atan2(-velocity.x, -velocity.z)
+		var angle = atan2(-moveDir.x, -moveDir.z)
 		var finalRot = lerpf(PlayerContainer.rotation.y, angle, .5)
 		PlayerContainer.rotation.y = angle 
 
@@ -82,8 +86,6 @@ func dash() -> void:
 		#print(newDir)
 		
 		
-	
-	
 	curSpeed = DASHSPEED
 	
 	isDash = true
@@ -91,6 +93,16 @@ func dash() -> void:
 	#velocity = Vector3(0,0,0)
 	isDash = false
 	#print("End")
+
+func surfaceAlign() -> void:
+	var normalDir = rayCast.get_collision_normal()
+	var newBasisY = normalDir
+	var newBasisX = -PlayerContainer.basis.z.cross(PlayerContainer.basis.y)
+	#var newBasis = Vector3(newBasisX, newBasisY, basis.z).orth
+	var newBasis =  Basis(newBasisX, normalDir, PlayerContainer.basis.z).orthonormalized()
+	PlayerContainer.basis = newBasis
+	#rayCast.position = -basis.y * 5
+	print(PlayerContainer.basis.z * 5)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -118,5 +130,7 @@ func _process(delta: float) -> void:
 		dash()
 	if not isDash:
 		move(delta)
+	
+	surfaceAlign()
 		
 	move_and_slide()

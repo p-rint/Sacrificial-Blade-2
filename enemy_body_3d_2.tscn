@@ -1,9 +1,10 @@
-[gd_scene load_steps=34 format=3 uid="uid://dos2bifkvy03p"]
+[gd_scene load_steps=42 format=3 uid="uid://dos2bifkvy03p"]
 
 [ext_resource type="Script" uid="uid://ralyxpxx7ot8" path="res://enemy_body_3d_2.gd" id="1_s3ewn"]
+[ext_resource type="Script" uid="uid://d3tu60tbo1al3" path="res://hurt_box.gd" id="2_86ond"]
 [ext_resource type="Texture2D" uid="uid://cra2l17020dal" path="res://icon.svg" id="2_k0kfp"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+[ext_resource type="Shader" uid="uid://cjxmoqf25kc1h" path="res://Enemy.gdshader" id="3_w8pno"]
+[ext_resource type="Script" uid="uid://cvqy4idu0xgdm" path="res://enemy_hitbox.gd" id="4_87ixx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
 
@@ -33,7 +34,7 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -48,7 +49,7 @@ resource_name = "Attack2"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -63,7 +64,7 @@ resource_name = "Attack3"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -79,7 +80,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -94,7 +95,7 @@ resource_name = "Down"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -109,7 +110,7 @@ resource_name = "Left"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -124,7 +125,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D/SwordPivot:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D/SwordPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -136,14 +137,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:rotation")
+tracks/1/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.09079203, 0, 0)]
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EnemyContainer/MeshInstance3D:surface_material_override/0:shader_parameter/mixAmt")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_u3olo"]
@@ -151,7 +164,7 @@ resource_name = "Right"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -161,12 +174,43 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, -0.23071508)]
 }
 
+[sub_resource type="Animation" id="Animation_mi2qe"]
+resource_name = "Stun"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:surface_material_override/0:shader_parameter/mixAmt")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_k0kfp"]
+resource_name = "TestWindup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -2.226115, 0), Vector3(0, 1.0295174, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_jvo56"]
 resource_name = "Up"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/path = NodePath("EnemyContainer/MeshInstance3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -186,6 +230,8 @@ _data = {
 &"Left": SubResource("Animation_ew7rt"),
 &"RESET": SubResource("Animation_c7tqt"),
 &"Right": SubResource("Animation_u3olo"),
+&"Stun": SubResource("Animation_mi2qe"),
+&"TestWindup": SubResource("Animation_k0kfp"),
 &"Up": SubResource("Animation_jvo56")
 }
 
@@ -266,20 +312,21 @@ nodes/Dsh/node = SubResource("AnimationNodeAnimation_4wng8")
 nodes/Dsh/position = Vector2(430, 440)
 node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Attack", 1, &"atk1", &"Attack2", 0, &"Attack", &"Attack2", 1, &"atk2", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"atk3", &"Dash", 0, &"Attack3", &"Dash", 1, &"Dsh"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fglih"]
+render_priority = 0
+shader = ExtResource("3_w8pno")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/mixAmt = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_87ixx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w8pno"]
+size = Vector3(1.3037109, 1.5166016, 3.0283203)
+
 [node name="EnemyBody3D2" type="CharacterBody3D"]
 script = ExtResource("1_s3ewn")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9999999, 0, 0, 0, 0.9958812, 0.09066737, 0, -0.09066734, 0.9958815, -0.088504076, 0, 0)
-mesh = SubResource("BoxMesh_4xowi")
-skeleton = NodePath("../..")
-
-[node name="SwordPivot" type="Node3D" parent="MeshInstance3D"]
-
-[node name="Sword" type="MeshInstance3D" parent="MeshInstance3D/SwordPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
-mesh = SubResource("BoxMesh_4xowi")
-skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_noarx")
@@ -321,3 +368,34 @@ parameters/Dash/request = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1337428, 0)
 billboard = 2
 texture = ExtResource("2_k0kfp")
+
+[node name="EnemyContainer" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemyContainer"]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0, 1.0000002, -0.088504076, 0, 0)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_fglih")
+
+[node name="SwordPivot" type="Node3D" parent="EnemyContainer/MeshInstance3D"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Sword" type="MeshInstance3D" parent="EnemyContainer/MeshInstance3D/SwordPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.2970097, 0, 0, 0, 3, 0, 0, -2)
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
+
+[node name="HurtBox" type="Area3D" parent="EnemyContainer/MeshInstance3D"]
+script = ExtResource("2_86ond")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyContainer/MeshInstance3D/HurtBox"]
+shape = SubResource("BoxShape3D_87ixx")
+
+[node name="EnemyHitbox" type="Area3D" parent="EnemyContainer"]
+script = ExtResource("4_87ixx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyContainer/EnemyHitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0294871)
+shape = SubResource("BoxShape3D_w8pno")
+
+[connection signal="area_entered" from="EnemyContainer/MeshInstance3D/HurtBox" to="EnemyContainer/MeshInstance3D/HurtBox" method="_on_area_entered"]

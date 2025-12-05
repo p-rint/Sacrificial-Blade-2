@@ -1,0 +1,63 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgvjl3n3fcsu3"]
+
+[ext_resource type="ArrayMesh" uid="uid://c0tf483db32f6" path="res://Map/terrainTest.obj" id="1_c7s6e"]
+[ext_resource type="Shader" uid="uid://j7yelki3uswy" path="res://map_shader.gdshader" id="2_wijl4"]
+[ext_resource type="Texture2D" uid="uid://camkg52778l33" path="res://Map/SplashTest.png" id="3_e0an3"]
+[ext_resource type="Shader" uid="uid://ddnbkymfh6x0a" path="res://water.gdshader" id="4_p5pve"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e0an3"]
+render_priority = 0
+shader = ExtResource("2_wijl4")
+shader_parameter/splashMap = ExtResource("3_e0an3")
+shader_parameter/texture1 = Color(0, 0, 0, 1)
+shader_parameter/texture2 = Color(0, 0, 0, 1)
+shader_parameter/texture3 = Color(0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p5pve"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_urblq"]
+noise = SubResource("FastNoiseLite_p5pve")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urblq"]
+render_priority = 0
+shader = ExtResource("4_p5pve")
+shader_parameter/waveSize = 3.0
+shader_parameter/waveSpeed = 2.20000001788144
+shader_parameter/noise = SubResource("NoiseTexture2D_urblq")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6iypd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_p5pve"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p5pve"]
+
+[node name="MapNew" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+
+[node name="Floor" type="MeshInstance3D" parent="Floor"]
+mesh = ExtResource("1_c7s6e")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_e0an3")
+
+[node name="Water" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -11.469687, 0, 0)
+mesh = ExtResource("1_c7s6e")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_urblq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(12.999999, 0, 0, 0, 1, 0, 0, 0, 12.999999, 0, 0.8224602, 0)
+shape = SubResource("BoxShape3D_6iypd")
+
+[node name="Object" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Object"]
+transform = Transform3D(0.023410654, -7.400721, 0, 0.07857456, 2.204985, 0, 0, 0, 31.004705, -20.496815, 1.4083681, 0)
+mesh = SubResource("BoxMesh_p5pve")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Object"]
+transform = Transform3D(0.023410654, -7.400721, 0, 0.07857456, 2.204985, 0, 0, 0, 31.004705, -20.496815, 1.4083681, 0)
+shape = SubResource("BoxShape3D_p5pve")
