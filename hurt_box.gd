@@ -25,8 +25,9 @@ func hitCheck(area : Area3D): #make sure hitbox not already hit
 func _on_area_entered(area: Area3D) -> void:
 	if area.monitoring == true:
 		
-		if hitCheck(area):
-			print("entered")
-			#get_parent().get_parent().get_parent().getHurt()
-			EnemyHurtManager.Hurt1(enemy)
-			#AttackData["EnemyFunc"].call()
+		if area.get_parent().get_parent().name == "Player":
+			if hitCheck(area):
+				print("entered")
+				#get_parent().get_parent().get_parent().getHurt()
+				EnemyHurtManager.Hurt1(enemy)
+				#AttackData["EnemyFunc"].call()

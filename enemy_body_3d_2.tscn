@@ -315,6 +315,7 @@ node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Att
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fglih"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_w8pno")
 shader_parameter/color = Color(1, 1, 1, 1)

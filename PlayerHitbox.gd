@@ -16,6 +16,7 @@ var attacks = ["Attack", "Attack2", "Attack3", "Attack4"]
 
 
 func comboManager() -> void:
+	$"../..".strength -= 1
 	animPlr.stop()
 	if comboNum >= attacks.size():
 		comboNum = 0
@@ -26,6 +27,7 @@ func comboManager() -> void:
 	
 	animPlr.play(atkName)
 	AttackData[atkName]["Func"].call()
+	AttackData.curAttack = currentAttack
 	comboNum += 1
 
 

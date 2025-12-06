@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=22 format=3 uid="uid://cr3cb80ak8u5u"]
 
 [ext_resource type="PackedScene" uid="uid://cgvjl3n3fcsu3" path="res://map.tscn" id="1_4arys"]
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
@@ -8,7 +8,9 @@
 [ext_resource type="Shader" uid="uid://b7qtoh4wbkk3r" path="res://dissolve.gdshader" id="6_i5arm"]
 [ext_resource type="Script" uid="uid://s7tresowmm0v" path="res://enemy_hurt_manager.gd" id="7_jsk3o"]
 [ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
+[ext_resource type="Script" uid="uid://btvjvrnhcp5gn" path="res://canvas_layer.gd" id="8_6iypd"]
 [ext_resource type="Script" uid="uid://bliddh1ofa5b" path="res://attack_data.gd" id="8_jsk3o"]
+[ext_resource type="Shader" uid="uid://brrqqqikixwmu" path="res://textShader.gdshader" id="9_tereu"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
@@ -39,6 +41,9 @@ shader_parameter/noise = SubResource("NoiseTexture2D_jsk3o")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wc5p8"]
 shader = ExtResource("7_wc5p8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cdqbm"]
+shader = ExtResource("9_tereu")
 
 [node name="Node3D" type="Node3D"]
 
@@ -72,6 +77,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 [node name="EnemyBody3D2" parent="." instance=ExtResource("4_i5arm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -6.892578)
 
+[node name="EnemyBody3D4" parent="." instance=ExtResource("4_i5arm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.18286, 2.5, -6.892578)
+
+[node name="EnemyBody3D5" parent="." instance=ExtResource("4_i5arm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.18286, 2.5, -10.827937)
+
+[node name="EnemyBody3D3" parent="." instance=ExtResource("4_i5arm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4780002, 2.5, -6.892578)
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
 
@@ -94,8 +108,10 @@ scale = Vector2(3, 3)
 texture = ExtResource("2_jka67")
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
+script = ExtResource("8_6iypd")
 
-[node name="Label" type="Label" parent="CanvasLayer2"]
+[node name="Health" type="Label" parent="CanvasLayer2"]
+material = SubResource("ShaderMaterial_cdqbm")
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -104,6 +120,44 @@ offset_right = 40.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 100
 text = "100"
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer2"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -159.0
+offset_right = 171.0
+offset_bottom = -111.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Health:"
+
+[node name="Strength" type="Label" parent="CanvasLayer2"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -171.0
+offset_top = -137.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 100
+text = "100"
+
+[node name="StrengthLabel" type="Label" parent="CanvasLayer2"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -171.0
+offset_top = -159.0
+offset_bottom = -111.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Strength:"
 
 [node name="Hurts" type="Node" parent="."]
 script = ExtResource("7_jsk3o")

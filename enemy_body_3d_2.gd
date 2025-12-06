@@ -12,30 +12,19 @@ var health = 100
 func windUp():
 	print()
 
-func getHurt():
-	
-	var dir = (position - player.position).normalized()
-	velocity = dir * 50
-	move_and_slide()
-	
-	isStunned = true
-	health -= 30
-	animPlr.play("Stun")
-	isAlive()
-	await get_tree().create_timer(.3).timeout
-	isStunned = false
-	
-	
+func flatenVector(vector : Vector3) -> Vector3:
+	return Vector3(vector.x, 0 ,vector.z)
 
 func move():
 	var dir = (player.position - position)
 	dir.y = 0
 	dir = dir.normalized()	
-	velocity = Vector3(dir.x, velocity.y, dir.z) * SPEED
-
+	#velocity = Vector3(dir.x, velocity.y, dir.z) * SPEED
+	velocity.x = dir.x * SPEED
+	velocity.z = dir.z * SPEED
 func applyGravity(delta):
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity += get_gravity() * delta * 1.1
 
 func isAlive():
 	if health <= 0:
@@ -49,15 +38,16 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
-	
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y = 5
 	#print("a")
 	
 	applyGravity(delta)
 	if not isStunned:
 		move()
 	else:
-		velocity = velocity.move_toward(Vector3(0, velocity.y,0), 5)
-	
+		velocity = velocity.move_toward(Vector3(0, velocity.y,0), 4)
+		
 	move_and_slide()
 	isAlive()
 	

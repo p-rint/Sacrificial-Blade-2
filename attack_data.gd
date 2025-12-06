@@ -9,8 +9,10 @@ extends Node
 @onready var playerContainer = $"../Player/PlayerContainer"
 @onready var EnemyHurtManager = $"../Player/EnemyHurtManager"
 
-var CamDir = Vector3(0,0,0)
+@onready var attackTimer = character.get_node("Timers/Attacking")
 
+var CamDir = Vector3(0,0,0)
+@export var curAttack : Dictionary
 
 #Extra functions
 
@@ -21,19 +23,21 @@ func setCamDir():
 
 
 #Main variables
-var Attack = {"MoveDistance" : 40, "Func" : Atk1}
-var Attack2 = {"MoveDistance" : 50, "Func" : Atk2}
-var Attack3 = {"MoveDistance" : 70, "Func" : Atk3}
-var Attack4 = {"MoveDistance" : 10, "Func" : Atk4}
+var Attack = {"MoveDistance" : 20, "KnockbackDist" : 30, "Damage" : 10, "Func" : Atk1}
+var Attack2 = {"MoveDistance" : 20,"KnockbackDist" : 30, "Damage" : 10, "Func" : Atk2}
+var Attack3 = {"MoveDistance" : 20, "KnockbackDist" : 30, "Damage" : 10, "Func" : Atk3}
+var Attack4 = {"MoveDistance" : 2, "KnockbackDist" : 30, "YKnockbackDist" : 7, "Damage" : 10, "Func" : Atk4}
 
 #Attack functions
 func Atk1():
 	character.velocity = CamDir * -Attack["MoveDistance"]
 	playerContainer.rotation.y = atan2(CamDir.x,CamDir.z)
+	attackTimer.start(.2)
 
 func Atk2():
 	character.velocity = CamDir * -Attack2["MoveDistance"]
 	playerContainer.rotation.y = atan2(CamDir.x,CamDir.z)
+	attackTimer.start(.2)
 
 func Atk3():
 	character.velocity = CamDir * -Attack3["MoveDistance"]

@@ -33,12 +33,18 @@ var forwardDir = Vector3()
 
 @onready var rayCast = $RayCast3D
 
+@onready var attackTimer = $Timers/Attacking
+
+@export var health = 100
+@export var strength = 20
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
 func move(delta):
-	if direction:	
+	if direction and attackTimer.is_stopped():	
 		lastDirection = direction
 		moveDir = ((camRight * direction.x) + (camForward * direction.z))
 		
@@ -58,8 +64,8 @@ func move(delta):
 			curSpeed = move_toward(curSpeed, SPEED, delta*100)
 			
 	else:
-		velocity = velocity.move_toward(Vector3(0, velocity.y,0), SPEED)
-		curSpeed = move_toward(curSpeed,0, SPEED)
+		velocity = velocity.move_toward(Vector3(0, velocity.y,0), 3)
+		curSpeed = move_toward(curSpeed,0, 3)
 #	print(curSpeed)
 
 func lookDir(delta :float):
@@ -128,9 +134,10 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("Dash"):
 		dash()
+		strength -= 4
 	if not isDash:
 		move(delta)
 	
-	surfaceAlign()
+	#surfaceAlign()
 		
 	move_and_slide()
