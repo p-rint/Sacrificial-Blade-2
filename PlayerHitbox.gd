@@ -14,6 +14,7 @@ var attacks = ["Attack", "Attack2", "Attack3", "Attack4"]
 
 @onready var AttackData = $"../../../AttackData"
 
+var oldMonitoring = monitoring
 
 func comboManager() -> void:
 	$"../..".strength -= 1
@@ -42,5 +43,26 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("Attack"):
 		comboManager()
 		monitoring = false
-		hitID = randf()
 		
+		#hitID = randf()
+		
+	if Input.is_action_just_pressed("Lunge"):
+		print("Lun")
+		animPlr.stop()
+		#animPlr.play("RESET")
+		#currentAttack = AttackData["Lunge"]
+		animPlr.play("Lunge")
+		AttackData["Lunge"]["Func"].call()
+		
+	if Input.is_action_just_pressed("QuickSpin"):
+		print("QS")
+		animPlr.stop()
+		#animPlr.play("RESET")
+		#currentAttack = AttackData["Lunge"]
+		animPlr.play("QuickSpin")
+		AttackData["QuickSpin"]["Func"].call()
+	
+	if oldMonitoring != monitoring:
+		hitID = randf()
+		oldMonitoring = monitoring
+	

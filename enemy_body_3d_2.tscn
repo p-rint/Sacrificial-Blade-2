@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dos2bifkvy03p"]
+[gd_scene load_steps=44 format=3 uid="uid://dos2bifkvy03p"]
 
 [ext_resource type="Script" uid="uid://ralyxpxx7ot8" path="res://enemy_body_3d_2.gd" id="1_s3ewn"]
 [ext_resource type="Script" uid="uid://d3tu60tbo1al3" path="res://hurt_box.gd" id="2_86ond"]
@@ -326,6 +326,20 @@ shader_parameter/mixAmt = 0.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_w8pno"]
 size = Vector3(1.3037109, 1.5166016, 3.0283203)
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w8pno"]
+particle_flag_align_y = true
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, -40, 0)
+linear_accel_min = -40.0
+linear_accel_max = -20.000002
+damping_min = 61.718002
+damping_max = 61.718002
+
+[sub_resource type="BoxMesh" id="BoxMesh_mi2qe"]
+size = Vector3(0.1, 0.5, 0.1)
+
 [node name="EnemyBody3D2" type="CharacterBody3D"]
 script = ExtResource("1_s3ewn")
 
@@ -333,11 +347,12 @@ script = ExtResource("1_s3ewn")
 shape = SubResource("BoxShape3D_noarx")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-emitting = false
+visible = false
 process_material = SubResource("ParticleProcessMaterial_a0tk4")
 draw_pass_1 = SubResource("BoxMesh_r3fl7")
 
 [node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
+visible = false
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_wc5p8")
 draw_pass_1 = SubResource("BoxMesh_jsk3o")
@@ -398,5 +413,18 @@ script = ExtResource("4_87ixx")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyContainer/EnemyHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0294871)
 shape = SubResource("BoxShape3D_w8pno")
+
+[node name="HitVFX" type="Node3D" parent="."]
+
+[node name="Sparks" type="GPUParticles3D" parent="HitVFX"]
+emitting = false
+amount = 16
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_w8pno")
+draw_pass_1 = SubResource("BoxMesh_mi2qe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HitVFX"]
 
 [connection signal="area_entered" from="EnemyContainer/MeshInstance3D/HurtBox" to="EnemyContainer/MeshInstance3D/HurtBox" method="_on_area_entered"]

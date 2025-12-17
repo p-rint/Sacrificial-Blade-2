@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://b5untqg1w05xr"]
+[gd_scene load_steps=54 format=3 uid="uid://b5untqg1w05xr"]
 
 [ext_resource type="Script" uid="uid://boa513wm16y51" path="res://character_body_3d2.gd" id="1_vd578"]
 [ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_c7tqt"]
@@ -311,6 +311,57 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0.18704692)]
 }
 
+[sub_resource type="Animation" id="Animation_wi0c6"]
+resource_name = "Lunge"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.23333333, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.6), Vector3(0, 0, -1.2), Vector3(0, 0, -0.8)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.26666668, 0.43333334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
 [sub_resource type="Animation" id="Animation_c7tqt"]
 length = 0.001
 tracks/0/type = "value"
@@ -385,6 +436,18 @@ tracks/5/keys = {
 "update": 0,
 "values": [Vector3(2, -2, -2)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0.38692617)]
+}
 
 [sub_resource type="Animation" id="Animation_u3olo"]
 resource_name = "Right"
@@ -416,6 +479,81 @@ tracks/0/keys = {
 "values": [Vector3(-0.09079203, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_3tkgg"]
+resource_name = "QuickSpin"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.23333332, 0.23596048, 0.41331264, 0.6999999),
+"transitions": PackedFloat32Array(1, 1, 0.006801184, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(2.3960927, 0, 0), Vector3(-6.2831855, 0, 0), Vector3(6.2831855, 0, 0), Vector3(2.7803094, 0, 0), Vector3(2.3090706, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerContainer/MeshInstance3D/SwordPivot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerContainer/MeshVFX/Slash:surface_material_override/0:shader_parameter/time")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.10410756, 0.2071979, 0.70374703),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerContainer/MeshVFX/Slash:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.099999994, 0.23333332, 0.41390374, 0.7051145),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.04397872, 0.010415908, -1.5835153), Vector3(-8.6132, 0.010471975, -1.5830137), Vector3(-12.147491, 0.010471975, -1.5830137), Vector3(-12.583824, 0.010471975, -1.5830137)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerContainer/MeshVFX/Slash:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-2, 2, -2)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlayerContainer/SwordHitbox:monitoring")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.12212455, 0.18179905, 0.20261574, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_obynr"]
 _data = {
 &"Attack": SubResource("Animation_vd578"),
@@ -425,6 +563,8 @@ _data = {
 &"Dash": SubResource("Animation_nvtkd"),
 &"Down": SubResource("Animation_1igb4"),
 &"Left": SubResource("Animation_ew7rt"),
+&"Lunge": SubResource("Animation_wi0c6"),
+&"QuickSpin": SubResource("Animation_3tkgg"),
 &"RESET": SubResource("Animation_c7tqt"),
 &"Right": SubResource("Animation_u3olo"),
 &"Up": SubResource("Animation_jvo56")
@@ -609,7 +749,7 @@ mesh = SubResource("BoxMesh_4xowi")
 skeleton = NodePath("../../..")
 
 [node name="SwordPivot" type="Node3D" parent="PlayerContainer/MeshInstance3D"]
-transform = Transform3D(0.99999976, 0, 0, 0, 0.50000006, 0, 0, 0, 1.0000002, 0, 0, 0)
+transform = Transform3D(0.99999976, 0, 0, 0, 0.49999988, 0, 0, 0, 0.99999976, 0, 0, 0.38692617)
 
 [node name="Sword" type="MeshInstance3D" parent="PlayerContainer/MeshInstance3D/SwordPivot"]
 transform = Transform3D(0.2, 0, 0, 0, 0.297, 0, 0, 0, 3, 0, 0, -2)
@@ -626,9 +766,10 @@ shape = SubResource("BoxShape3D_vd578")
 debug_color = Color(0.96023375, 0.99162036, 0.99999994, 0.41960785)
 
 [node name="MeshVFX" type="Node3D" parent="PlayerContainer"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 
 [node name="Slash" type="MeshInstance3D" parent="PlayerContainer/MeshVFX"]
-transform = Transform3D(1.5695527, 0, -1.2395581, 0, -2, 0, -1.2395581, 0, -1.5695527, 0, 0, -0.19024134)
+transform = Transform3D(1.5695527, 0, -1.2395581, 0, -2, 0, -1.2395581, 0, -1.5695527, -4.656612e-10, 0, -0.19024134)
 mesh = ExtResource("8_wi0c6")
 surface_material_override/0 = SubResource("ShaderMaterial_l6ohk")
 

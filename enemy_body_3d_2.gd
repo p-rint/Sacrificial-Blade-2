@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 const SPEED = 3.0
 
-@onready var player = $"../Player"
+@onready var player = $"../../Player"
 @onready var animPlr = $AnimationPlayer
 
 var isStunned = false
@@ -29,6 +29,9 @@ func applyGravity(delta):
 func isAlive():
 	if health <= 0:
 		queue_free()
+		return false
+	else:
+		return true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,16 +41,17 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = 5
-	#print("a")
-	
-	applyGravity(delta)
-	if not isStunned:
-		move()
-	else:
-		velocity = velocity.move_toward(Vector3(0, velocity.y,0), 4)
+	if isAlive():
+		if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+			velocity.y = 5
+		#print("a")
 		
-	move_and_slide()
-	isAlive()
+		applyGravity(delta)
+		if not isStunned:
+			move()
+		else:
+			velocity = velocity.move_toward(Vector3(0, velocity.y,0), 4)
+			
+		move_and_slide()
+	
 	

@@ -2,7 +2,7 @@ extends Area3D
 
 var IDs = []
 
-@onready var EnemyHurtManager = $"../../../../Hurts"
+@onready var EnemyHurtManager = $"../../../../../Hurts"
 
 @onready var AttackData = $"AttackData"
 

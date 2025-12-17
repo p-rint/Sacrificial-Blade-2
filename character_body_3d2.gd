@@ -138,6 +138,7 @@ func _process(delta: float) -> void:
 	if not isDash:
 		move(delta)
 	
+
 	#surfaceAlign()
 		
 	move_and_slide()

@@ -13,16 +13,22 @@ func Hurt1(enemy : CharacterBody3D):
 	player.strength += 3
 	#print(attackData.curAttack)
 	var curAttack = attackData.curAttack
+	print(curAttack)
+	
 	dirToPlayer = flatenVector(enemy.position - player.position).normalized()
 	enemy.velocity = dirToPlayer * curAttack["KnockbackDist"]
+	
 	if curAttack.has("YKnockbackDist"):
 		enemy.velocity.y = curAttack["YKnockbackDist"]
 		print("ad")
 	enemy.move_and_slide()
 	
 	enemy.isStunned = true
-	enemy.health -= 10
+	enemy.health -= curAttack["Damage"]
 	enemy.animPlr.play("Stun")
+	
+	enemy.rotation.y = atan2(dirToPlayer.x, dirToPlayer.z)
+	enemy.get_node("HitVFX/Sparks").emitting = true
 	
 	await get_tree().create_timer(.3).timeout
 	if is_instance_valid(enemy):

@@ -2,7 +2,12 @@ extends Node3D
 
 var mouseLock = true
 
-@onready var enemy = $"../../EnemyBody3D2"
+
+@onready var target = $"../../Target"
+
+@onready var enemies = $"../../Enemies"
+
+@onready var curTarget = target
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,10 +15,15 @@ func _ready() -> void:
 	pass # Replace with function body.
 	
 
-func lockAt() -> void:
-	var dir = (global_position - enemy.position )
-	var angle = Vector2(dir.x, dir.z).angle()
-	
+func lockOn() -> void:
+	if is_instance_valid(curTarget):
+		#look_at(curTarget.position)
+		pass
+	else:
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
 	#print(angle)
 	
 	pass 
@@ -37,7 +47,7 @@ func _input(event: InputEvent) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
+	lockOn()
 	if Input.is_action_just_pressed("Escape"):
 		if mouseLock:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -46,7 +56,11 @@ func _process(delta: float) -> void:
 		mouseLock = not mouseLock
 	#lockAt()
 	
-	
+	if Input.is_action_just_pressed("LTarget"):
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
 	#if Input.is_action_just_pressed("LockOn"):
 	
 		
