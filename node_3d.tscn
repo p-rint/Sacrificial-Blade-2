@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cr3cb80ak8u5u"]
+[gd_scene load_steps=24 format=3 uid="uid://cr3cb80ak8u5u"]
 
 [ext_resource type="PackedScene" uid="uid://cgvjl3n3fcsu3" path="res://map.tscn" id="1_4arys"]
 [ext_resource type="Shader" uid="uid://bd8k5xxv1h360" path="res://grid.gdshader" id="1_r3fl7"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://dgpo3iy7uuvw1" path="res://fade.gdshader" id="7_wc5p8"]
 [ext_resource type="Script" uid="uid://btvjvrnhcp5gn" path="res://canvas_layer.gd" id="8_6iypd"]
 [ext_resource type="Script" uid="uid://bliddh1ofa5b" path="res://attack_data.gd" id="8_jsk3o"]
+[ext_resource type="Script" uid="uid://bwpamvcrjtmnq" path="res://Cards.gd" id="9_cdqbm"]
 [ext_resource type="Shader" uid="uid://brrqqqikixwmu" path="res://textShader.gdshader" id="9_tereu"]
 [ext_resource type="Script" uid="uid://b2p6qs154ohr6" path="res://EnemyManage.gd" id="11_tereu"]
 
@@ -174,6 +175,33 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "Strength:"
 
+[node name="Cards" type="CanvasLayer" parent="UI"]
+script = ExtResource("9_cdqbm")
+
+[node name="1" type="Button" parent="UI/Cards"]
+offset_left = 208.0
+offset_top = 133.0
+offset_right = 409.0
+offset_bottom = 446.0
+theme_override_font_sizes/font_size = 100
+text = "1"
+
+[node name="2" type="Button" parent="UI/Cards"]
+offset_left = 465.0
+offset_top = 133.0
+offset_right = 666.0
+offset_bottom = 446.0
+theme_override_font_sizes/font_size = 100
+text = "2"
+
+[node name="3" type="Button" parent="UI/Cards"]
+offset_left = 712.0
+offset_top = 133.0
+offset_right = 913.0
+offset_bottom = 446.0
+theme_override_font_sizes/font_size = 100
+text = "3"
+
 [node name="Hurts" type="Node" parent="."]
 script = ExtResource("7_jsk3o")
 
@@ -190,3 +218,7 @@ autostart = true
 [node name="Target" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.653759, 5.5447025, 0)
 mesh = SubResource("BoxMesh_tereu")
+
+[connection signal="button_up" from="UI/Cards/1" to="UI/Cards" method="button1"]
+[connection signal="button_up" from="UI/Cards/2" to="UI/Cards" method="button2"]
+[connection signal="button_up" from="UI/Cards/3" to="UI/Cards" method="button3"]

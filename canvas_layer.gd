@@ -15,3 +15,7 @@ func _process(delta: float) -> void:
 	$Health.text = str(player.health)
 	$Strength.text = str(player.strength)
 	$Wave.text = str(enemies.wave)
+
+
+func button1() -> void:
+	pass # Replace with function body.

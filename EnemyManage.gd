@@ -8,7 +8,7 @@ var enemy = preload("res://enemy_body_3d_2.tscn")
 func _ready() -> void:
 	#await get_tree().create_timer(1).timeout
 	spawnEnemy()
-	$"../Timer".connect("timeout", spawnEnemy)
+	#$"../Timer".connect("timeout", spawnEnemy)
 
 func spawnEnemy():
 	var newEnemy = enemy.instantiate()
