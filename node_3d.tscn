@@ -53,7 +53,6 @@ shader = ExtResource("9_tereu")
 [node name="MapNew" parent="." instance=ExtResource("1_4arys")]
 
 [node name="Map" type="Node3D" parent="."]
-visible = false
 
 [node name="Floor" type="StaticBody3D" parent="Map"]
 transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
@@ -176,6 +175,7 @@ theme_override_font_sizes/font_size = 30
 text = "Strength:"
 
 [node name="Cards" type="CanvasLayer" parent="UI"]
+visible = false
 script = ExtResource("9_cdqbm")
 
 [node name="1" type="Button" parent="UI/Cards"]
