@@ -13,6 +13,8 @@ var direction = Vector3(0,0,-1)
 
 var time = 1.0
 
+@onready var holder = get_parent().get_parent().get_parent()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	ID = randi()
@@ -28,7 +30,6 @@ func _process(delta: float) -> void:
 func hasHit(area : Area3D) -> bool:
 	for i in alreadyHit: # If  already hit table
 		if i == area:
-			print("AAAA")
 			return true
 
 	#if not in already hit table
@@ -39,18 +40,12 @@ func _on_area_entered(area: Area3D) -> void:
 	if area.get_parent() == hitboxes: # Make sure it's not an other attack hitbox
 		return
 		
-	
-		
 	if area.name == "Hurtbox"   and   not hasHit(area):
-		if area.get_parent().name == "Enemy":
+		
+		if area.get_parent().name != "Player":
 			var enemy = area.get_parent()
 			reaction.call(enemy)
-			print("a")
-			#print("AFarf")
-		if area.get_parent().name == "Player":
-			var enemy = get_parent().get_parent().get_parent()
-			reaction.call(enemy)
-			print("bb")
+			print("hitenemy")
 
 
 func _on_lifetime_timeout() -> void:
