@@ -1,153 +1,158 @@
 extends CharacterBody3D
 
-var input_dir : Vector2
-var direction : Vector3
 
-const SPEED = 8.0
-const JUMP_VELOCITY = 6.0
-const crouchSPEED = 4
-const sprintSPEED = 16.0
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
 
-var moveSpeed = SPEED
+const DASHSPEED = 45.0
 
-@onready var camPiv = $CamPivot
+var curSpeed = 0
 
-@onready var model = $Character
+var camDir = Vector3(0,0,0) #Where the camera is facing
 
-@onready var ParticleManager: Node = $"../Scripts/Particles"
+var direction = Vector3(0,0,0) # Movedirection
 
+var lastDirection = Vector3(0,0,0)
 
-var dt : float
-var targetRot = 0
+var dashVel = 0
 
-@onready var animPlr: AnimationPlayer = $AnimationPlayer
+var sprintSpeed = 5 #Total speed is 10, but just so I can add it to speed
 
-@onready var gunRay: RayCast3D = $CamPivot/Camera3D/GunRay
+var comboNum = 0
+var attackTable = [attack, attack2, attack3, attack4, attack5, attack6]
+var attackAnimTable = ["Attack", "Attack2", "Attack3"]
 
+@onready var animPlr = $AnimationPlayer
+@onready var animTree = $AnimationTree
 
-@export var health = 100
+var isSprinting = false
 
-var isCrouch = false
-var isSprint = false
-@export var isSliding = false
-
-var slideSpeed = 0
-var slideDir : Vector3
-
-var curGravity = get_gravity()
-
-@onready var wallJumpCast: RayCast3D = $WallJump
-
-var wallJumpForce = 0
-var wallJumpDir = Vector3()
-
-
-
-func flatten(vector: Vector3) -> Vector3:
-	return Vector3( vector.x, 0, vector.z)
-
-func move() -> void:
-	#model.rotation.y = lerp_angle(model.rotation.y, targetRot, .5)
-	
-	if direction:
-		velocity.x = lerp(velocity.x, direction.x * moveSpeed, .15 * 2)
-		velocity.z = lerp(velocity.z, direction.z * moveSpeed, .15 * 2)
+func comboManager(delta) -> void:
+	if comboNum < attackAnimTable.size():
+		#attackTable[comboNum].call()
+		animPlr.play(attackAnimTable[comboNum])
+		if comboNum - 1 >= 0:
+			print("yes!!")
+		#if comboNum > 0:
+			#animTree.set("parameters/" + attackAnimTable[comboNum - 1] + "/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
 		
-		#model.rotation.y = lerp_angle(model.rotation.y, atan2(-velocity.x, -velocity.z), .2)
+		animTree.set("parameters/" + attackAnimTable[comboNum] + "/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		$CamPivot/Camera3D.XscreenShake(delta)
+		print(comboNum)
+		comboNum += 1
+		
 	else:
-		velocity.x = move_toward(velocity.x, 0, 1)
-		velocity.z = move_toward(velocity.z, 0, 1)
+		print("0")
+		animTree.set("parameters/Attack/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		comboNum = 1
 
 
+
+
+func dash(dir : Vector3) -> void:
+	
+	if dir:
+		dashVel = DASHSPEED #or wherever the player is facing
+	else:
+		velocity.z = DASHSPEED
+		#move_and_slide()
+	animTree.set("parameters/Dash/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+func attack() -> void:
+	#$"Character Model".get_active_material(0).set_shader_parameter("t", 0.0)
+	velocity.z = -10
+
+func attack2() -> void:
+	velocity.z = 50
+	velocity.y = 20
+	await get_tree().create_timer(.1).timeout
+	velocity.y = 1
+	
+func attack3() -> void:
+	velocity.z = -50
+	velocity.y = -40
+	
+func attack4() -> void:
+	velocity.z = -30
+	velocity.x = -30
+	await get_tree().create_timer(.07).timeout
+	velocity.z = -30
+	velocity.x = 30
+	await get_tree().create_timer(.05).timeout
+	velocity.z = -30
+	velocity.x = -30
+	await get_tree().create_timer(.05).timeout
+	velocity.z = -30
+	velocity.x = 30
+
+func attack5() -> void:
+	velocity.y = 40
+	await get_tree().create_timer(.1).timeout
+	velocity.y /= 10
+	
+func attack6() -> void:
+	velocity.y = -60
+
+
+func lookDir(direction : Vector2, dt) -> void:
+	var angle = lerp($PlayerContainer.rotation.y, atan2(direction.x, direction.y), .2)
+	
+	$PlayerContainer.rotation.y = angle
+	
 
 func _physics_process(delta: float) -> void:
-	dt = delta
+	
+	var camRight = $CamPivot.global_basis.x
+	var camForward = $CamPivot.global_basis.z
+	camDir = (camRight + camForward).normalized()
+	camDir.y = 0
+	#lookDir(camDir)
+	#print(camDir)
 	
 	
-	#gravity.
+	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	
-	input_dir = Input.get_vector("Left", "Right", "Up", "Down")
-	direction = flatten(camPiv.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
-	move()
-	
+
 	# Handle jump.
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
-
-
-	if Input.is_action_just_pressed("Shoot"):
-		animPlr.stop()
-		animPlr.play("shoot")
-		if gunRay.is_colliding() and gunRay.collide_with_areas:
-			print("Hit!!!")
-			gunRay.get_collider().get_parent().damage(10)
-			ParticleManager.bulletHit(gunRay.get_collision_point(), global_position)
-			
 	
-	if Input.is_action_just_pressed("Crouch"):
-		camPiv.position.y = -0.81
-		isCrouch = true
-		slideSpeed = flatten(velocity).length()
-		slideDir = flatten(velocity).normalized()
+	if Input.is_action_just_pressed("Attack"):
+		#attack()
+		comboManager(delta)
 		
-	
-	if Input.is_action_just_released("Crouch"):
-		camPiv.position.y = 0
-		isCrouch = false
-	
-	if Input.is_action_just_pressed("Sprint"):
-		isSprint = true
-	
-	if Input.is_action_just_released("Sprint"):
-		isSprint = false
-	
-	
-	wallJumpCast.target_position = -direction * 2
-	if Input.is_action_just_pressed("Jump") and not is_on_floor():
-		if wallJumpCast.is_colliding():
-			velocity = direction * 50
-			velocity.y = 13
-	
-	handleSpeed()
-	move_and_slide()
-	 
-	print(velocity)
-		
-
-func damage(dmg):
-	health -= dmg
-	
-
-
-func handleSpeed():
-	if isCrouch:
-		crouch()
-	elif isSprint:
-		moveSpeed = sprintSPEED
-		camPiv.twistOffset = 0
-	else:
-		moveSpeed = SPEED
-		camPiv.twistOffset = 0
-		
-	
-
-
-
-func crouch():
-	camPiv.twistOffset = 3
-	if flatten(velocity).length() > 5:
-		
-		isSliding = true
-		var slideVel = slideDir * slideSpeed#-flatten(camPiv.basis.z).normalized() * slideSpeed
-		slideSpeed = lerpf(slideSpeed,0,dt /3.0)
-		velocity = slideVel
+	if Input.is_action_pressed("Dash"):
+		sprintSpeed = 2
 	else: 
+		sprintSpeed = 0
+	
+	
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var input_dir = Input.get_vector("Left","Right", "Up", "Down")
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if direction:
+		#velocity.x = (direction.x * (SPEED + dashVel + sprintSpeed))
+		#velocity.z = (direction.z * (SPEED + dashVel + sprintSpeed))	
+		var moveDir = ((camRight * direction.x) + (camForward * direction.z)) * SPEED
+		velocity.x = moveDir.x
+		velocity.z = moveDir.z
+		#velocity = camDir
 		
-		isSliding = false
-		moveSpeed = crouchSPEED
+		curSpeed = move_toward(curSpeed,5, SPEED)
+		#lastDirection = direction
+		lookDir(-Vector2(velocity.x,velocity.z), delta)
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+		curSpeed = move_toward(curSpeed,0, SPEED)
+	dashVel = move_toward(dashVel, 0, SPEED)
+	
+	animTree.set("parameters/MoveDirection/blend_position", Vector2(direction.x, -direction.z))
 	
 	
+	if Input.is_action_just_pressed("Dash"):
+		dash(direction)
+
+	move_and_slide()

@@ -1,7 +1,9 @@
 extends CanvasLayer
 
-@onready var healthBar: ProgressBar = $health
-@onready var player: CharacterBody3D = $"../Player"
+@onready var player = $"../../Player"
+@onready var enemies: Node3D = $"../../Enemies"
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,4 +12,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	healthBar.value = player.health
+	$Health.text = str(player.health)
+	$Strength.text = str(player.strength)
+	$Wave.text = str(enemies.wave)
+
+
+func button1() -> void:
+	pass # Replace with function body.

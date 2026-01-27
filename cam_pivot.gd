@@ -1,66 +1,66 @@
 extends Node3D
 
-var mouseLock = false
+var mouseLock = true
 
-@onready var player: CharacterBody3D = $".."
 
-var twistTarget : float = 0.0
-var twist : float = 0.0
+@onready var target = $"../../Target"
 
-var twistOffset : float = 0.0
+@onready var enemies = $"../../Enemies"
 
-var xBob : float = 0.0
-var bobTime : float = 0.0
+@onready var curTarget = target
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	pass # Replace with function body.
 	
+
+func lockOn() -> void:
+	if is_instance_valid(curTarget):
+		#look_at(curTarget.position)
+		pass
+	else:
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
+	#print(angle)
 	
+	pass 
 	
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and not mouseLock:
-		
-		
+	if event is InputEventMouseMotion:
+		#print("a")
+		#print(event.relative.x)
 		rotation.y -= event.relative.x * .001 #Left <-> Right
 		rotation.x -= event.relative.y * .001 #Up <-> Down
 		
 		rotation.y = wrapf(rotation.y, -PI, PI)
 		rotation.x = clampf(rotation.x,-PI/2,PI/2)
 		
+		#print(rotation.x)
+		#print(-PI/2)
+		
+		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
+	lockOn()
 	if Input.is_action_just_pressed("Escape"):
 		if mouseLock:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		mouseLock = not mouseLock
+	#lockAt()
+	
+	if Input.is_action_just_pressed("LTarget"):
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
+	#if Input.is_action_just_pressed("LockOn"):
+	
 		
-	
-	#Strafe
-	
-	twistTarget = -basis.x.dot(player.velocity.normalized()) + twistOffset
-	twist = lerpf(twist, twistTarget, delta * (5 + twistOffset))
-	
-	$Camera3D/Hand.rotation.z = deg_to_rad(twist) * 6
-	$Camera3D.rotation.z = deg_to_rad(twist) * 2
-	
-	#View Bob
-	bobTime += delta * player.velocity.length()
-	var bobSpeed = (player.velocity.length()/player.SPEED)
-	
-	$Camera3D/Hand.position.x = .3 + sin(bobTime / 2.0) * .01
-	$Camera3D/Hand.position.y = -.2 + sin(bobTime) * .01
-		
-	
-	
-	#print(twist)
-	
-	
