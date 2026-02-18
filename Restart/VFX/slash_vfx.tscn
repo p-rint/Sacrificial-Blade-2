@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjtsribc5u4vg"]
+
+[ext_resource type="ArrayMesh" uid="uid://bop0tidirljrl" path="res://Sword Slash/sword slash.obj" id="1_niwim"]
+[ext_resource type="Script" uid="uid://cb48ql07vasiv" path="res://Restart/VFX/Slash_vfx.gd" id="1_qkyjq"]
+[ext_resource type="Shader" uid="uid://cxt8jfycflo1m" path="res://Restart/VFX/slash_shader.gdshader" id="2_5hvlj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5hvlj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qkyjq"]
+noise = SubResource("FastNoiseLite_5hvlj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkyjq"]
+render_priority = 0
+shader = ExtResource("2_5hvlj")
+shader_parameter/time = 0.0
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_qkyjq")
+
+[node name="slash vfx" type="Node3D"]
+script = ExtResource("1_qkyjq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, 1, 4.371139e-08, 0, -4.371139e-08, 1, 1, 4.371139e-08, 1.9106855e-15, 0, 0, 0)
+mesh = ExtResource("1_niwim")
+surface_material_override/0 = SubResource("ShaderMaterial_qkyjq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Lifetime" type="Timer" parent="."]
+
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]

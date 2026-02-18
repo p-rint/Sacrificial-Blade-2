@@ -1,0 +1,439 @@
+[gd_scene load_steps=36 format=3 uid="uid://p0j7p8v6ts6r"]
+
+[ext_resource type="PackedScene" uid="uid://qp7xhmcgikv0" path="res://Restart/area_spawner.tscn" id="1_3ckhg"]
+[ext_resource type="PackedScene" uid="uid://iloa2wkw378u" path="res://Restart/player.tscn" id="1_yj2yw"]
+[ext_resource type="Script" uid="uid://u1n6nkxgvqey" path="res://Restart/area_spawner.gd" id="2_0o1ma"]
+[ext_resource type="Script" uid="uid://c3rsgoeroo43b" path="res://Restart/Attack Functions.gd" id="2_hfnue"]
+[ext_resource type="PackedScene" uid="uid://b3otvrqewc8ar" path="res://Restart/enemy.tscn" id="3_0o1ma"]
+[ext_resource type="Script" uid="uid://dubuvr4l2q45b" path="res://Restart/Reactions.gd" id="3_5svq2"]
+[ext_resource type="Script" uid="uid://b7vqjkq5r83mn" path="res://Restart/Enemies.gd" id="4_6b7oy"]
+[ext_resource type="Script" uid="uid://c0efrppwbp0fh" path="res://Restart/ui.gd" id="6_6b7oy"]
+[ext_resource type="Shader" uid="uid://bm8xnd0sgmeni" path="res://Restart/UIFire.gdshader" id="7_gbopr"]
+
+[sub_resource type="Shader" id="Shader_yj2yw"]
+code = "
+// NOTE: Shader automatically converted from Godot Engine 4.5.stable's ProceduralSkyMaterial.
+
+shader_type sky;
+render_mode use_debanding;
+
+uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
+uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float inv_sky_curve : hint_range(1, 100) = 4.0;
+uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
+uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float inv_ground_curve : hint_range(1, 100) = 30.0;
+uniform float sun_angle_max = 0.877;
+uniform float inv_sun_curve : hint_range(1, 100) = 22.78;
+uniform float exposure : hint_range(0, 128) = 1.0;
+
+uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
+uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+uniform sampler2D cloud1;
+uniform sampler2D cloud2;
+uniform sampler2D cloud3;
+
+uniform vec2 cloudScale;
+uniform vec2 cloudSpeed;
+
+void sky() {
+	float v_angle = clamp(EYEDIR.y, -1.0, 1.0);
+	vec3 sky = mix(sky_top_color.rgb, sky_horizon_color.rgb, clamp(pow(1.0 - v_angle, inv_sky_curve), 0.0, 1.0));
+
+	if (LIGHT0_ENABLED) {
+		float sun_angle = dot(LIGHT0_DIRECTION, EYEDIR);
+		float sun_size = cos(LIGHT0_SIZE);
+		if (sun_angle > sun_size) {
+			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
+		} else if (sun_angle > sun_angle_max) {
+			float c2 = (sun_size - sun_angle) / (sun_size - sun_angle_max);
+			sky = mix(sky, LIGHT0_COLOR * LIGHT0_ENERGY, clamp(pow(1.0 - c2, inv_sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT1_ENABLED) {
+		float sun_angle = dot(LIGHT1_DIRECTION, EYEDIR);
+		float sun_size = cos(LIGHT1_SIZE);
+		if (sun_angle > sun_size) {
+			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
+		} else if (sun_angle > sun_angle_max) {
+			float c2 = (sun_size - sun_angle) / (sun_size - sun_angle_max);
+			sky = mix(sky, LIGHT1_COLOR * LIGHT1_ENERGY, clamp(pow(1.0 - c2, inv_sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT2_ENABLED) {
+		float sun_angle = dot(LIGHT2_DIRECTION, EYEDIR);
+		float sun_size = cos(LIGHT2_SIZE);
+		if (sun_angle > sun_size) {
+			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
+		} else if (sun_angle > sun_angle_max) {
+			float c2 = (sun_size - sun_angle) / (sun_size - sun_angle_max);
+			sky = mix(sky, LIGHT2_COLOR * LIGHT2_ENERGY, clamp(pow(1.0 - c2, inv_sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT3_ENABLED) {
+		float sun_angle = dot(LIGHT3_DIRECTION, EYEDIR);
+		float sun_size = cos(LIGHT3_SIZE);
+		if (sun_angle > sun_size) {
+			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
+		} else if (sun_angle > sun_angle_max) {
+			float c2 = (sun_size - sun_angle) / (sun_size - sun_angle_max);
+			sky = mix(sky, LIGHT3_COLOR * LIGHT3_ENERGY, clamp(pow(1.0 - c2, inv_sun_curve), 0.0, 1.0));
+		}
+	}
+
+	
+	
+	vec3 ground = mix(ground_bottom_color.rgb, ground_horizon_color.rgb, clamp(pow(1.0 + v_angle, inv_ground_curve), 0.0, 1.0));
+	
+	
+	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
+	vec3 clouds = texture(cloud1, sky_uv * cloudScale + TIME * cloudSpeed).rgb - texture(cloud2, sky_uv * cloudScale + TIME * cloudSpeed * 2.3).rgb;
+	vec3 clouds2 = texture(cloud2, sky_uv * cloudScale / 1.2 + TIME * cloudSpeed).rgb - texture(cloud3, sky_uv * cloudScale + TIME * cloudSpeed * 2.3).rgb;
+	
+	clouds = clamp(clouds, 0, 1);
+	clouds2 = clamp(clouds2, 0, 1);
+	vec3 clouds3 = clouds + clouds2;
+	sky += clouds3;
+	
+	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yj2yw"]
+noise_type = 3
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6b7oy"]
+noise = SubResource("FastNoiseLite_yj2yw")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gbopr"]
+noise_type = 3
+frequency = 0.009
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3ckhg"]
+noise = SubResource("FastNoiseLite_gbopr")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i5qjd"]
+noise_type = 3
+offset = Vector3(300, 0, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gbopr"]
+noise = SubResource("FastNoiseLite_i5qjd")
+seamless = true
+invert = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0o1ma"]
+shader = SubResource("Shader_yj2yw")
+shader_parameter/sky_top_color = Color(0.06931975, 0.09247092, 0.12330731, 1)
+shader_parameter/sky_horizon_color = Color(0.3172547, 0.32398587, 0.3374621, 1)
+shader_parameter/inv_sky_curve = 3.999999841054287
+shader_parameter/ground_bottom_color = Color(0.2, 0.169, 0.133, 1)
+shader_parameter/ground_horizon_color = Color(0.22714657, 0.23243418, 0.24302095, 1)
+shader_parameter/inv_ground_curve = 48.5630022592425
+shader_parameter/sun_angle_max = 0.8660254
+shader_parameter/inv_sun_curve = 22.782017
+shader_parameter/exposure = 0.70000003325
+shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
+shader_parameter/cloud1 = SubResource("NoiseTexture2D_6b7oy")
+shader_parameter/cloud2 = SubResource("NoiseTexture2D_3ckhg")
+shader_parameter/cloud3 = SubResource("NoiseTexture2D_gbopr")
+shader_parameter/cloudScale = Vector2(0.1, 0.1)
+shader_parameter/cloudSpeed = Vector2(0.01, 0.01)
+
+[sub_resource type="Sky" id="Sky_i5qjd"]
+sky_material = SubResource("ShaderMaterial_0o1ma")
+
+[sub_resource type="Environment" id="Environment_6b7oy"]
+background_mode = 2
+background_energy_multiplier = 1.1
+sky = SubResource("Sky_i5qjd")
+tonemap_mode = 2
+glow_enabled = true
+adjustment_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_hfnue"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3m7co"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6b7oy"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_6b7oy"]
+
+[sub_resource type="Gradient" id="Gradient_3ckhg"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0o1ma"]
+gradient = SubResource("Gradient_3ckhg")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ucga7"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1w7rr"]
+noise = SubResource("FastNoiseLite_ucga7")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b516b"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s214q"]
+noise = SubResource("FastNoiseLite_b516b")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wxhvh"]
+shader = ExtResource("7_gbopr")
+shader_parameter/noise = SubResource("NoiseTexture2D_1w7rr")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_s214q")
+shader_parameter/gradient = SubResource("GradientTexture1D_0o1ma")
+shader_parameter/dir = Vector2(0, 0.7)
+shader_parameter/strength = 2.35999999567834
+shader_parameter/height = -0.7000000067056
+
+[sub_resource type="Animation" id="Animation_gbopr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Health:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 538)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Wave:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(357.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Energy:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(801, 538)]
+}
+
+[sub_resource type="Animation" id="Animation_i5qjd"]
+resource_name = "energy none"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Energy:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333334, 0.06666667, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(801, 538), Vector2(795, 538), Vector2(803, 538), Vector2(797.89, 538), Vector2(801, 538)]
+}
+
+[sub_resource type="Animation" id="Animation_6b7oy"]
+resource_name = "health up"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Health:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.042575065, 0.13988951, 0.16666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 538), Vector2(0, 534.18), Vector2(0, 539.003), Vector2(0, 538)]
+}
+
+[sub_resource type="Animation" id="Animation_3ckhg"]
+resource_name = "wave up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Wave:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333333, 0.1, 0.16666667, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(357.5, 0), Vector2(389, 0), Vector2(328, 0), Vector2(364, 0), Vector2(357.5, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0o1ma"]
+_data = {
+&"RESET": SubResource("Animation_gbopr"),
+&"energy none": SubResource("Animation_i5qjd"),
+&"health up": SubResource("Animation_6b7oy"),
+&"wave up": SubResource("Animation_3ckhg")
+}
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6b7oy")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Map"]
+transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
+visible = false
+collision_layer = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Floor"]
+mesh = SubResource("BoxMesh_hfnue")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Floor"]
+shape = SubResource("BoxShape3D_3m7co")
+
+[node name="Tori" type="Node3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Tori"]
+transform = Transform3D(1, 0, 0, 0, 14, 0, 0, 0, 1, 5, 5, 0)
+mesh = SubResource("BoxMesh_6b7oy")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Map/Tori"]
+transform = Transform3D(1, 0, 0, 0, 14, 0, 0, 0, 1, -5, 5, 0)
+mesh = SubResource("BoxMesh_6b7oy")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Map/Tori"]
+transform = Transform3D(15, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+mesh = SubResource("BoxMesh_6b7oy")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Map/Tori"]
+transform = Transform3D(25, 0, 0, 0, 2, 0, 0, 0, 2, 0, 13, 0)
+mesh = SubResource("BoxMesh_6b7oy")
+
+[node name="Rocks" type="Node3D" parent="Map"]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+use_collision = true
+collision_layer = 3
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+size = Vector3(25, 1, 22)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3, -26.5)
+size = Vector3(25, 7, 33)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3, -42.5)
+size = Vector3(49, 7, 40)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(-1.3113416e-06, 0, 10, 0, 11, 0, -30, 0, -4.371139e-07, 0, 1, -10)
+mesh = SubResource("PrismMesh_6b7oy")
+
+[node name="Areas" type="Node3D" parent="Map"]
+
+[node name="AreaSpawner" parent="Map/Areas" instance=ExtResource("1_3ckhg")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 10, -18)
+script = ExtResource("2_0o1ma")
+
+[node name="Player" parent="." instance=ExtResource("1_yj2yw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0360627, 0)
+
+[node name="GameFunctions" type="Node" parent="."]
+
+[node name="Attacks" type="Node" parent="GameFunctions"]
+script = ExtResource("2_hfnue")
+
+[node name="Timers" type="Node" parent="GameFunctions/Attacks"]
+
+[node name="Combo" type="Timer" parent="GameFunctions/Attacks/Timers"]
+one_shot = true
+
+[node name="QuickSpin" type="Timer" parent="GameFunctions/Attacks/Timers"]
+one_shot = true
+
+[node name="Reactions" type="Node" parent="GameFunctions"]
+script = ExtResource("3_5svq2")
+
+[node name="EnemyAttack" type="Timer" parent="GameFunctions"]
+autostart = true
+
+[node name="Enemies" type="Node3D" parent="."]
+script = ExtResource("4_6b7oy")
+
+[node name="Enemy" parent="Enemies" instance=ExtResource("3_0o1ma")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 10, -34)
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("6_6b7oy")
+
+[node name="Health" type="Label" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -110.0
+offset_right = 437.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 80
+text = "Health: 100"
+
+[node name="Wave" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -218.5
+offset_right = 218.49817
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Wave: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Energy" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -351.0
+offset_top = -110.0
+offset_right = 0.00012207031
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 80
+text = "Energy: 5"
+metadata/_edit_use_anchors_ = true
+
+[node name="Fire" type="ColorRect" parent="UI/Energy"]
+material = SubResource("ShaderMaterial_wxhvh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI"]
+active = false
+libraries = {
+&"": SubResource("AnimationLibrary_0o1ma")
+}
+
+[node name="CameraBase" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraBase"]
+transform = Transform3D(1, 0, 0, 0, 0.8562671, 0.5165333, 0, -0.5165333, 0.8562671, 0, 3.4, 2.4)
+
+[connection signal="timeout" from="GameFunctions/EnemyAttack" to="Enemies" method="_on_enemy_attack_timeout"]

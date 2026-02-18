@@ -1,16 +1,265 @@
-[gd_scene load_steps=54 format=3 uid="uid://b5untqg1w05xr"]
+[gd_scene load_steps=55 format=4 uid="uid://df6p6xdwbwpba"]
 
-[ext_resource type="Script" uid="uid://boa513wm16y51" path="res://character_body_3d2.gd" id="1_vd578"]
-[ext_resource type="Script" uid="uid://bptty0fyjrmty" path="res://cam_pivot.gd" id="2_c7tqt"]
-[ext_resource type="Script" uid="uid://b6c8jqsfvbdjw" path="res://camera_3d.gd" id="3_nl27k"]
-[ext_resource type="Script" uid="uid://drqhjstwnh03t" path="res://PlayerHitbox.gd" id="4_e80uo"]
-[ext_resource type="ArrayMesh" uid="uid://i3bf80p6ueyr" path="res://Slash/slash.obj" id="5_cxr5p"]
-[ext_resource type="Shader" uid="uid://wdd5n7nkq2kn" path="res://Slash.gdshader" id="5_dtqjt"]
-[ext_resource type="Texture2D" uid="uid://cla6pewbhpe7q" path="res://Slash/Slash Texture.png" id="6_5ncpa"]
 [ext_resource type="ArrayMesh" uid="uid://bop0tidirljrl" path="res://Sword Slash/sword slash.obj" id="8_wi0c6"]
 [ext_resource type="Texture2D" uid="uid://cnxvlrayqfghu" path="res://Sword Slash/slash.png" id="10_hp6x6"]
 
+[sub_resource type="GDScript" id="GDScript_e80uo"]
+script/source = "extends CharacterBody3D
+
+
+const SPEED = 8.0
+const JUMP_VELOCITY = 4.5
+
+const DASHSPEED = 30
+
+var curSpeed = 0
+
+@onready var cam = $CamPivot
+@onready var PlayerContainer = $PlayerContainer
+var camForward = Vector3()
+var camRight = Vector3()
+
+var camDir = Vector3(0,0,0) #Where the camera is facing
+
+var direction = Vector3(0,0,0) # Movedirection
+
+var lastDirection = Vector3(0,0,0)
+
+var lastMoveDir = Vector3(0,0,0)
+
+var isSprint = false
+
+var canMove = true
+
+var isDash = false
+
+var moveDir = Vector3(0,0,0)
+
+var forwardDir = Vector3()
+
+@onready var rayCast = $RayCast3D
+
+@onready var attackTimer = $Timers/Attacking
+
+@export var health = 100
+@export var strength = 20
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+func move(delta):
+	if direction and attackTimer.is_stopped():	
+		lastDirection = direction
+		moveDir = ((camRight * direction.x) + (camForward * direction.z))
+		
+		moveDir.y = 0
+		moveDir = moveDir.normalized()
+		
+		velocity.x = moveDir.x * curSpeed
+		velocity.z = moveDir.z * curSpeed
+		
+		lastMoveDir = moveDir
+		
+		lookDir(delta)
+		
+		if isSprint == true:
+			curSpeed = move_toward(curSpeed, SPEED + 4, delta*100)
+		else:
+			curSpeed = move_toward(curSpeed, SPEED, delta*100)
+			
+	else:
+		velocity = velocity.move_toward(Vector3(0, velocity.y,0), 3)
+		curSpeed = move_toward(curSpeed,0, 3)
+#	print(curSpeed)
+
+func lookDir(delta :float):
+	if direction:
+		var angle = atan2(-moveDir.x, -moveDir.z)
+		var finalRot = lerpf(PlayerContainer.rotation.y, angle, .5)
+		PlayerContainer.rotation.y = angle 
+
+
+func dash() -> void:
+	var newDir
+	
+	if direction: #forward dash
+		newDir = -moveDir
+		PlayerContainer.rotation.y = atan2(newDir.x,newDir.z)
+	else: # backwards dash
+		
+		newDir = -camForward
+		PlayerContainer.rotation.y = atan2(-newDir.x,-newDir.z)
+	
+	newDir.y = 0
+	newDir = newDir.normalized()
+	velocity = newDir * -DASHSPEED
+		#print(newDir)
+		
+		
+	curSpeed = DASHSPEED
+	
+	isDash = true
+	await get_tree().create_timer(.1).timeout
+	#velocity = Vector3(0,0,0)
+	isDash = false
+	#print(\"End\")
+
+func surfaceAlign() -> void:
+	var normalDir = rayCast.get_collision_normal()
+	var newBasisY = normalDir
+	var newBasisX = -PlayerContainer.basis.z.cross(PlayerContainer.basis.y)
+	#var newBasis = Vector3(newBasisX, newBasisY, basis.z).orth
+	var newBasis =  Basis(newBasisX, normalDir, PlayerContainer.basis.z).orthonormalized()
+	PlayerContainer.basis = newBasis
+	#rayCast.position = -basis.y * 5
+	print(PlayerContainer.basis.z * 5)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	
+	camForward = cam.global_basis.z
+	camRight = cam.global_basis.x
+	
+	camDir = cam.global_basis.z + cam.global_basis.x
+	
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+	
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+	var input_dir = Input.get_vector(\"Left\",\"Right\", \"Up\", \"Down\")
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#print(direction)
+	if Input.is_action_pressed(\"Dash\"):
+		isSprint = true
+	else:
+		isSprint = false
+	
+	if Input.is_action_just_pressed(\"Dash\"):
+		dash()
+		strength -= 4
+	if not isDash:
+		move(delta)
+	
+
+	#surfaceAlign()
+		
+	move_and_slide()
+"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_noarx"]
+
+[sub_resource type="GDScript" id="GDScript_cxr5p"]
+script/source = "extends Node3D
+
+var mouseLock = true
+
+
+@onready var target = $\"../../Target\"
+
+@onready var enemies = $\"../../Enemies\"
+
+@onready var curTarget = target
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	pass # Replace with function body.
+	
+
+func lockOn() -> void:
+	if is_instance_valid(curTarget):
+		#look_at(curTarget.position)
+		pass
+	else:
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
+	#print(angle)
+	
+	pass 
+	
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		#print(\"a\")
+		#print(event.relative.x)
+		rotation.y -= event.relative.x * .001 #Left <-> Right
+		rotation.x -= event.relative.y * .001 #Up <-> Down
+		
+		rotation.y = wrapf(rotation.y, -PI, PI)
+		rotation.x = clampf(rotation.x,-PI/2,PI/2)
+		
+		#print(rotation.x)
+		#print(-PI/2)
+		
+		
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	lockOn()
+	if Input.is_action_just_pressed(\"Escape\"):
+		if mouseLock:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		mouseLock = not mouseLock
+	#lockAt()
+	
+	if Input.is_action_just_pressed(\"LTarget\"):
+		if enemies.get_children().size() >= 0:
+			curTarget = enemies.get_child( randf_range(0, enemies.get_children().size()) )
+		else:
+			curTarget = target
+	#if Input.is_action_just_pressed(\"LockOn\"):
+	
+		
+"
+
+[sub_resource type="GDScript" id="GDScript_tdg3f"]
+script/source = "extends Camera3D
+
+var strength = .1 #Strength of screen shake
+var speed = 50 #How fast it ossilates
+var time = 0.0 #Time since shake started
+
+var friction = 5
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+func startShake(str) -> void:
+	strength += str
+
+func XscreenShake(dt) -> void: # dt is delta
+	
+	time += dt * speed
+	position.x = sin(time) * strength
+	strength -= (dt/friction)
+	strength = clampf(strength,0, 2)
+	
+	if strength <= 0:
+		time = 0
+	#Engine.time_scale = time
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	
+	if Input.is_action_just_pressed(\"shake\"):
+		print(\"rah\")
+		startShake(.1)
+		
+	XscreenShake(delta)
+	
+	
+"
 
 [sub_resource type="Animation" id="Animation_vd578"]
 resource_name = "Attack"
@@ -649,8 +898,120 @@ node_connections = [&"output", 0, &"Dash", &"Attack", 0, &"MoveDirection", &"Att
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
+[sub_resource type="GDScript" id="GDScript_dtqjt"]
+script/source = "extends Area3D
+
+@export var isPlayer = true
+
+@export var hitID = 0
+
+@export var currentAttack : Dictionary
+
+@onready var animPlr = $\"../../AnimationPlayer\"
+
+var comboNum = 0
+
+var attacks = [\"Attack\", \"Attack2\", \"Attack3\", \"Attack4\"]
+
+@onready var AttackData = $\"../../../AttackData\"
+
+var oldMonitoring = monitoring
+
+func comboManager() -> void:
+	$\"../..\".strength -= 1
+	animPlr.stop()
+	if comboNum >= attacks.size():
+		comboNum = 0
+		
+	
+	var atkName = attacks[comboNum]
+	currentAttack = AttackData[atkName]
+	
+	animPlr.play(atkName)
+	AttackData[atkName][\"Func\"].call()
+	AttackData.curAttack = currentAttack
+	comboNum += 1
+
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	
+	if Input.is_action_just_pressed(\"Attack\"):
+		comboManager()
+		monitoring = false
+		
+		#hitID = randf()
+		
+	if Input.is_action_just_pressed(\"Lunge\"):
+		print(\"Lun\")
+		animPlr.stop()
+		#animPlr.play(\"RESET\")
+		#currentAttack = AttackData[\"Lunge\"]
+		animPlr.play(\"Lunge\")
+		AttackData[\"Lunge\"][\"Func\"].call()
+		
+	if Input.is_action_just_pressed(\"QuickSpin\"):
+		print(\"QS\")
+		animPlr.stop()
+		#animPlr.play(\"RESET\")
+		#currentAttack = AttackData[\"Lunge\"]
+		animPlr.play(\"QuickSpin\")
+		AttackData[\"QuickSpin\"][\"Func\"].call()
+	
+	if oldMonitoring != monitoring:
+		hitID = randf()
+		oldMonitoring = monitoring
+	
+"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_vd578"]
 size = Vector3(3.069336, 1.7287598, 2.9941406)
+
+[sub_resource type="Shader" id="Shader_5ncpa"]
+code = "shader_type spatial;
+
+render_mode unshaded, cull_disabled;
+
+uniform sampler2D texture;
+uniform sampler2D noise;
+uniform sampler2D noise2;
+
+uniform float time : hint_range(0, 1.0);
+
+
+uniform sampler2D screentexture : hint_screen_texture;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	// Called for every pixel the material is visible on.
+	vec4 tex = texture(texture,UV);
+	vec4 noi = texture(noise, (UV + TIME/1.0)/2.0);
+	vec4 noi2 = texture(noise2, UV);
+	vec4 screen = texture(screentexture, SCREEN_UV);
+
+	vec4 distort = texture(screentexture, SCREEN_UV - (noi.rr / 2.0));
+
+	ALBEDO = tex.rgb;
+	ALBEDO -= distort.rgb;
+	ALPHA = tex.r / 2.0;
+	ALPHA -= time / 2.0;
+
+	//if (noi2.r < time)
+	//	ALPHA = 0.0;
+}
+//void light() {
+//	// Called for every pixel for every light affecting the material.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3tkgg"]
 
@@ -664,7 +1025,7 @@ noise = SubResource("FastNoiseLite_hp6x6")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l6ohk"]
 render_priority = 0
-shader = ExtResource("5_dtqjt")
+shader = SubResource("Shader_5ncpa")
 shader_parameter/texture = ExtResource("10_hp6x6")
 shader_parameter/noise = SubResource("NoiseTexture2D_3tkgg")
 shader_parameter/noise2 = SubResource("NoiseTexture2D_l6ohk")
@@ -682,16 +1043,51 @@ seamless = true
 noise = SubResource("FastNoiseLite_5ncpa")
 seamless = true
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kpjcp"]
+load_path = "res://.godot/imported/Slash Texture.png-4dfacb5d88953ca3dbd1926515de80d0.s3tc.ctex"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wi0c6"]
 render_priority = 0
-shader = ExtResource("5_dtqjt")
-shader_parameter/texture = ExtResource("6_5ncpa")
+shader = SubResource("Shader_5ncpa")
+shader_parameter/texture = SubResource("CompressedTexture2D_kpjcp")
 shader_parameter/noise = SubResource("NoiseTexture2D_5ncpa")
 shader_parameter/noise2 = SubResource("NoiseTexture2D_wi0c6")
 shader_parameter/time = 0.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tdg3f"]
 gravity = Vector3(0, 0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cfnwm"]
+_surfaces = [{
+"aabb": AABB(-3.507169, -1e-06, -1.635306, 7.014338, 1e-05, 3.7706652),
+"format": 34896613377,
+"index_count": 48,
+"index_data": PackedByteArray("AQAFAAwAAAABAAIAAgABAAwAAgAMAAMAAwAMAAQADAAFAA0ADAANAAQABQAHAA0ABAANAAYADQAHAA4ADQAOAAYABwALAA4ABgAOAAgADgALAAkADgAJAAgACAAJAAoA"),
+"lods": [1.4792811e-08, PackedByteArray("AAABAAIAAgABAAMAAwABAAQAAQAFAAQABAAFAAYABQAHAAYABgAHAAgABwAJAAgACAAJAAoABwALAAkA")],
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAzMwAAAAD/PzMzIGAAAKoCMzOabgAA/xQzM5uvAACqQjMzfOcAAP9/mRk2eAAA/3+ZGf//AAD/vwAAIGAAAFS9AAB85wAAVP0AAJpuAAD/6gAAm68AAP//AAAAAAAAcUAzM/KjAAD/f5kZGrwAAI2/AADyowAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_kne1u"]
+_surfaces = [{
+"aabb": AABB(-3.507169, -1e-06, -1.635306, 7.014338, 1e-05, 3.7706652),
+"attribute_data": PackedByteArray("/////0ng/////yDB//8tgEngLYCRwP//kcAtgNmg///ZoC2AJIEgwSSBLYAkgf//SeAgwZHAIMHZoCDB"),
+"format": 34896613399,
+"index_count": 48,
+"index_data": PackedByteArray("AQAFAAwAAAABAAIAAgABAAwAAgAMAAMAAwAMAAQADAAFAA0ADAANAAQABQAHAA0ABAANAAYADQAHAA4ADQAOAAYABwALAA4ABgAOAAgADgALAAkADgAJAAgACAAJAAoA"),
+"lods": [1.4792811e-08, PackedByteArray("AAABAAIAAgABAAMAAwABAAQAAQAFAAQABAAFAAYABQAHAAYABgAHAAgABwAJAAgACAAJAAoABwALAAkA")],
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(1.99196, 2.002106, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAzMwAAnuz/PzMzIGB+9KoCMzOabrPv/xQzM5uvYPKqQjMzfOeA9v9/mRk2ePn//3+ZGf//5v//vwAAIGCk8VS9AAB853P3VP0AAJpuEfP/6gAAm69a7///AAAAAGXxcUAzM/Kj0fX/f5kZGrzu/42/AADyoxX2m8k3E+TFywsqyFYQ6MbSDevE2AkBwAQADMAbAIKOvbjoiIq7KI1quaqQqbe+jp+4QMWDCgjAEQBAit66")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_cfnwm")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5ncpa"]
 emission_shape_scale = Vector3(0.5, 0.1, 0.1)
@@ -707,17 +1103,17 @@ initial_velocity_max = 3.0
 size = Vector3(0.1, 0.1, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_vd578")
+script = SubResource("GDScript_e80uo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_noarx")
 
 [node name="CamPivot" type="Node3D" parent="."]
-script = ExtResource("2_c7tqt")
+script = SubResource("GDScript_cxr5p")
 
 [node name="Camera3D" type="Camera3D" parent="CamPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1641245, 2.4937534)
-script = ExtResource("3_nl27k")
+script = SubResource("GDScript_tdg3f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -759,7 +1155,7 @@ skeleton = NodePath("../..")
 [node name="SwordHitbox" type="Area3D" parent="PlayerContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0000005)
 monitoring = false
-script = ExtResource("4_e80uo")
+script = SubResource("GDScript_dtqjt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerContainer/SwordHitbox"]
 shape = SubResource("BoxShape3D_vd578")
@@ -789,7 +1185,7 @@ material_override = SubResource("ShaderMaterial_wi0c6")
 amount = 2
 lifetime = 2.0
 process_material = SubResource("ParticleProcessMaterial_tdg3f")
-draw_pass_1 = ExtResource("5_cxr5p")
+draw_pass_1 = SubResource("ArrayMesh_kne1u")
 
 [node name="WalkDust" type="GPUParticles3D" parent="Particles"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3341416, 0.34435534)

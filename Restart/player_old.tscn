@@ -1,0 +1,194 @@
+[gd_scene load_steps=15 format=3 uid="uid://1bhoxmpfmk4g"]
+
+[ext_resource type="Script" uid="uid://b6nm68kqp1xcd" path="res://Restart/Player.gd" id="1_osjmv"]
+[ext_resource type="Script" uid="uid://c0io3gilufaig" path="res://Restart/cam_pivot.gd" id="2_lohnu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yj2yw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5svq2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_yj2yw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jeea3"]
+
+[sub_resource type="Animation" id="Animation_i5qjd"]
+resource_name = "1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.099999994, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -1.8221238, 0), Vector3(0, 0.8673764, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yj2yw"]
+resource_name = "2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.8673764, 0), Vector3(0, -1.6390561, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gbopr"]
+resource_name = "3"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -1.6390561, 0), Vector3(0, 0.6546906, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0o1ma"]
+resource_name = "Lunge"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0992162, 0.25260216),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.77964497), Vector3(0, 0, -0.70009065)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character/Node3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ucga7"]
+resource_name = "Quickspin"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(2.2599046, 0, 0), Vector3(-6.2831855, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_6b7oy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character/Node3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3ckhg"]
+resource_name = "Uppercut"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character/Node3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.77318084, 0, 0), Vector3(0.7762003, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gbopr"]
+_data = {
+&"1": SubResource("Animation_i5qjd"),
+&"2": SubResource("Animation_yj2yw"),
+&"3": SubResource("Animation_gbopr"),
+&"Lunge": SubResource("Animation_0o1ma"),
+&"Quickspin": SubResource("Animation_ucga7"),
+&"RESET": SubResource("Animation_6b7oy"),
+&"Uppercut": SubResource("Animation_3ckhg")
+}
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_osjmv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_yj2yw")
+
+[node name="CamPivot" type="Node3D" parent="."]
+script = ExtResource("2_lohnu")
+
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 2.099, 1.514)
+
+[node name="Character" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_5svq2")
+skeleton = NodePath("../..")
+
+[node name="Hitboxes" type="Node3D" parent="Character"]
+visible = false
+
+[node name="Node3D" type="Node3D" parent="Character"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Character/Node3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 5, 0, 0, -2.5330179)
+mesh = SubResource("BoxMesh_yj2yw")
+
+[node name="Hurtbox" type="Area3D" parent="Character"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Character/Hurtbox"]
+transform = Transform3D(1.4, 0, 0, 0, 2.8, 0, 0, 0, 1.4, 0, 0, 0)
+shape = SubResource("BoxShape3D_jeea3")
+debug_color = Color(0, 0, 0, 0.41960785)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_gbopr")
+}
