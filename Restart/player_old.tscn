@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://1bhoxmpfmk4g"]
 
-[ext_resource type="Script" uid="uid://b6nm68kqp1xcd" path="res://Restart/Player.gd" id="1_osjmv"]
+[ext_resource type="Script" uid="uid://b6nm68kqp1xcd" path="res://Restart/Player [old].gd" id="1_osjmv"]
 [ext_resource type="Script" uid="uid://c0io3gilufaig" path="res://Restart/cam_pivot.gd" id="2_lohnu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yj2yw"]

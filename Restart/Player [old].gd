@@ -2,29 +2,40 @@ extends CharacterBody3D
 
 var direction : Vector3
 var input_dir : Vector2
+
+
 const SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 
 @onready var camPiv = $CamPivot
+
 @onready var AttackFuncs = $"../GameFunctions/Attacks"
+
 @onready var model = $Character
 
 var dt : float
+
+
 var targetRot = 0
+
 @export var health = 99
+
 @export var energy = 14
+
 
 @onready var animPlr: AnimationPlayer = $AnimationPlayer
 @onready var animTree: AnimationTree = $AnimationTree
+
+@onready var quickSpinTimer: Timer = $Timers/QuickSpin
+
 @onready var enemies: Node3D = $"../Enemies"
+
+
 @export var targetEnemy : CharacterBody3D
 
 
 func flatten(vector: Vector3) -> Vector3:
 	return Vector3( vector.x, 0, vector.z)
-
-
-
 
 func move() -> void:
 	model.rotation.y = lerp_angle(model.rotation.y, targetRot, .5)
@@ -42,6 +53,11 @@ func move() -> void:
 func die():
 	if health <= 0:
 		energy -= 20
+
+func quickSpin():
+	
+	velocity = flatten(camPiv.basis.z).normalized() * -30 + Vector3(0,velocity.y,0)
+	
 
 func _ready() -> void:
 	targetEnemy = enemies.get_children().pick_random()
@@ -61,5 +77,9 @@ func _physics_process(delta: float) -> void:
 	input_dir = Input.get_vector("Left", "Right", "Up", "Down")
 	direction = flatten($CamPivot.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	move()
+	
+	if quickSpinTimer.time_left > 0:
+		quickSpin()
+		#print("eas")
 	
 	move_and_slide()

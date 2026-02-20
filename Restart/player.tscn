@@ -1,6 +1,6 @@
 [gd_scene load_steps=55 format=4 uid="uid://iloa2wkw378u"]
 
-[ext_resource type="Script" uid="uid://b6nm68kqp1xcd" path="res://Restart/Player.gd" id="1_jeea3"]
+[ext_resource type="Script" uid="uid://b6nm68kqp1xcd" path="res://Restart/Player [old].gd" id="1_jeea3"]
 [ext_resource type="Script" uid="uid://c0io3gilufaig" path="res://Restart/cam_pivot.gd" id="2_h4nyh"]
 [ext_resource type="Animation" uid="uid://b4bds1ac6deox" path="res://Restart/anims/Attack1.res" id="4_lw002"]
 [ext_resource type="Animation" uid="uid://qkd0jbc2mxa1" path="res://Restart/anims/Attack2.res" id="5_y3dlf"]

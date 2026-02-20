@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://p0j7p8v6ts6r"]
+[gd_scene load_steps=38 format=3 uid="uid://p0j7p8v6ts6r"]
 
 [ext_resource type="PackedScene" uid="uid://qp7xhmcgikv0" path="res://Restart/area_spawner.tscn" id="1_3ckhg"]
 [ext_resource type="PackedScene" uid="uid://iloa2wkw378u" path="res://Restart/player.tscn" id="1_yj2yw"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://c3rsgoeroo43b" path="res://Restart/Attack Functions.gd" id="2_hfnue"]
 [ext_resource type="PackedScene" uid="uid://b3otvrqewc8ar" path="res://Restart/enemy.tscn" id="3_0o1ma"]
 [ext_resource type="Script" uid="uid://dubuvr4l2q45b" path="res://Restart/Reactions.gd" id="3_5svq2"]
+[ext_resource type="ArrayMesh" uid="uid://dig80bqqpddrm" path="res://Restart/stairs.obj" id="3_ucga7"]
 [ext_resource type="Script" uid="uid://b7vqjkq5r83mn" path="res://Restart/Enemies.gd" id="4_6b7oy"]
+[ext_resource type="Script" uid="uid://c3wk3xumdnjp" path="res://Restart/Player.gd" id="5_1w7rr"]
 [ext_resource type="Script" uid="uid://c0efrppwbp0fh" path="res://Restart/ui.gd" id="6_6b7oy"]
 [ext_resource type="Shader" uid="uid://bm8xnd0sgmeni" path="res://Restart/UIFire.gdshader" id="7_gbopr"]
 
@@ -320,24 +322,63 @@ mesh = SubResource("BoxMesh_6b7oy")
 transform = Transform3D(25, 0, 0, 0, 2, 0, 0, 0, 2, 0, 13, 0)
 mesh = SubResource("BoxMesh_6b7oy")
 
-[node name="Rocks" type="Node3D" parent="Map"]
-
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+[node name="Map" type="CSGCombiner3D" parent="Map"]
 use_collision = true
 collision_layer = 3
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Map/CSGCombiner3D"]
-size = Vector3(25, 1, 22)
+[node name="CSGBox3D" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+size = Vector3(54, 1, 50)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+[node name="CSGBox3D13" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 38.5)
+size = Vector3(25, 3, 1)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.5, 14)
+size = Vector3(1, 2, 50)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.5, 14)
+size = Vector3(1, 2, 50)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3, -26.5)
 size = Vector3(25, 7, 33)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+[node name="CSGBox3D10" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 4.5, -17.5)
+size = Vector3(1, 10, 15)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 5, -17)
+size = Vector3(1, 9, 14)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Map/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3, -42.5)
 size = Vector3(49, 7, 40)
 
-[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGBox3D8" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.5, 4.5, -23)
+size = Vector3(12, 10, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 4.5, -23)
+size = Vector3(12, 10, 1)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.5, 4, -42.5)
+size = Vector3(2, 9, 40)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 3.5, -42.5)
+size = Vector3(1, 8, 40)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Map/Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 12.5, -60.5)
+size = Vector3(26, 24, 22)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/Map"]
 transform = Transform3D(-1.3113416e-06, 0, 10, 0, 11, 0, -30, 0, -4.371139e-07, 0, 1, -10)
 mesh = SubResource("PrismMesh_6b7oy")
 
@@ -347,8 +388,48 @@ mesh = SubResource("PrismMesh_6b7oy")
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 10, -18)
 script = ExtResource("2_0o1ma")
 
+[node name="Stairs" type="MeshInstance3D" parent="Map"]
+transform = Transform3D(-1.3113416e-07, 0, -3, 0, 3, 0, 3, 0, -1.3113416e-07, 0, 3, -8)
+visible = false
+mesh = ExtResource("3_ucga7")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -14.5, 7.5, 32)
+size = Vector3(2, 4, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -24.5, 15, 12)
+size = Vector3(3, 7, 4)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -14.5, 15, 22)
+size = Vector3(1, 7, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -14.5, 15, -3)
+size = Vector3(2, 7, 2)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 13.07, 7.5, 27)
+size = Vector3(2, 4, 2)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 18.07, 12.5, 17)
+size = Vector3(1, 6, 1)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 13.07, 15, 7)
+size = Vector3(1, 7, 3)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 13.07, 15, -3)
+size = Vector3(1, 7, 1)
+
 [node name="Player" parent="." instance=ExtResource("1_yj2yw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0360627, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0360627, 36)
+script = ExtResource("5_1w7rr")
 
 [node name="GameFunctions" type="Node" parent="."]
 
